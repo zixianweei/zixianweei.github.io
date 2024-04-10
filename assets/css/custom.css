@@ -1,0 +1,16 @@
+/* .md-typeset h1,
+.md-typeset h2,
+.md-typeset h3,
+.md-typeset h4,
+.md-typeset h5,
+.md-typeset h6 {
+    font-family: 'LXGW WenKai', 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    color: var(--md-default-fg-color);
+} */
+
+/* 移除MathJax上下的margin 原始大小为1em */
+div.arithmatex mjx-container[jax="CHTML"][display="true"] {
+    display: block;
+    text-align: center;
+    margin: 0 0;
+}
