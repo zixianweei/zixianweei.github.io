@@ -21,6 +21,21 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://zixianweei.github.io/blog/std-string-starts-with/</loc>
+         <lastmod>2024-04-10</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://zixianweei.github.io/blog/archive/2023/</loc>
+         <lastmod>2024-04-10</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://zixianweei.github.io/blog/category/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/</loc>
+         <lastmod>2024-04-10</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://zixianweei.github.io/tags/</loc>
          <lastmod>2024-04-10</lastmod>
          <changefreq>daily</changefreq>
