@@ -21,6 +21,11 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://zixianweei.github.io/blog/placement-new/</loc>
+         <lastmod>2024-04-11</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://zixianweei.github.io/blog/std-string-starts-with/</loc>
          <lastmod>2024-04-11</lastmod>
          <changefreq>daily</changefreq>
