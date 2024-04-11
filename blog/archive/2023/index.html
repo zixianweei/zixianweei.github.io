@@ -817,7 +817,7 @@
   </header>
   <div class="md-post__content md-typeset">
     <h2 id="cplacement-new"><a class="toclink" href="../../placement-new/">C++中的placement new</a></h2>
-<p>通常情况下，操作符<code>new</code>用于动态分类内存；并且所分配内存的生命周期将不受作用域管理<sup id="fnref3:1"><a class="footnote-ref" href="../../placement-new/#fn:1">1</a></sup>。与<code>malloc()</code>方法不同，操作符<code>new</code>会做两件事：分配内存；初始化对象。而<code>placement new</code>则是一种特殊的动态内存方法，其能够在已分配的内存空间上创建对象。因此，放置<code>new</code>只做了一件事：初始化对象。</p>
+<p>通常情况下，操作符<code>new</code>用于动态分类内存；并且所分配内存的生命周期将不受作用域管理<sup id="fnref3:1"><a class="footnote-ref" href="../../placement-new/#fn:1">1</a></sup>。与<code>malloc()</code>方法不同，操作符<code>new</code>会做两件事：分配内存；初始化对象。而<code>placement new</code>则是一种特殊的动态内存方法，其能够在已分配的内存空间上创建对象。因此，<code>placement new</code>只做了一件事：初始化对象。</p>
 
     
       <nav class="md-post__action">
