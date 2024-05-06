@@ -1,0 +1,5 @@
+{% extends "base.html" %}
+
+{% block extrahead %}
+  <meta name="google-site-verification" content="CwEXVX3HrfKbpMGxNBb0SjYQw4n-OPkpG9E0k4fpF6k"/>
+{% endblock %}
