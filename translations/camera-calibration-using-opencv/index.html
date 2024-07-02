@@ -1,21 +1,14 @@
-<!doctype html><html lang=zh-CN><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><title>翻译：OpenCV相机标定 - 阿先妙妙屋</title><meta name=Description content="欢迎来到我的小破站~，这里是阿先妙妙屋"><meta property="og:url" content="https://zixianweei.github.io/translations/camera-calibration-using-opencv/">
-<meta property="og:site_name" content="阿先妙妙屋"><meta property="og:title" content="翻译：OpenCV相机标定"><meta property="og:description" content="FYI 原文来自OpenCV官方文档[^1]，本人在翻译过程中进行了简单加工和信息补充。如果您认为侵犯了您的合法权益，请与我联系，我将删除本文。 本"><meta property="og:locale" content="zh_CN"><meta property="og:type" content="article"><meta property="article:section" content="translations"><meta property="article:published_time" content="2024-06-24T08:40:36+08:00"><meta property="article:modified_time" content="2024-07-02T09:42:38+08:00"><meta property="article:tag" content="OpenCV"><meta property="og:image" content="https://zixianweei.github.io/logo.png"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://zixianweei.github.io/logo.png"><meta name=twitter:title content="翻译：OpenCV相机标定"><meta name=twitter:description content="FYI 原文来自OpenCV官方文档[^1]，本人在翻译过程中进行了简单加工和信息补充。如果您认为侵犯了您的合法权益，请与我联系，我将删除本文。 本"><meta name=application-name content="我的网站"><meta name=apple-mobile-web-app-title content="我的网站"><meta name=theme-color content="#ffffff"><meta name=msapplication-TileColor content="#da532c"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://zixianweei.github.io/translations/camera-calibration-using-opencv/><link rel=stylesheet href=/css/style.min.css><link rel=preload href=/lib/fontawesome-free/all.min.css as=style onload='this.onload=null,this.rel="stylesheet"'><noscript><link rel=stylesheet href=/lib/fontawesome-free/all.min.css></noscript><link rel=preload href=/lib/animate/animate.min.css as=style onload='this.onload=null,this.rel="stylesheet"'><noscript><link rel=stylesheet href=/lib/animate/animate.min.css></noscript><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"翻译：OpenCV相机标定","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/zixianweei.github.io\/translations\/camera-calibration-using-opencv\/"},"genre":"translations","keywords":"OpenCV","wordcount":5028,"url":"https:\/\/zixianweei.github.io\/translations\/camera-calibration-using-opencv\/","datePublished":"2024-06-24T08:40:36+08:00","dateModified":"2024-07-02T09:42:38+08:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"zixianweei"},"description":""}</script></head><body data-header-desktop=fixed data-header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem("theme")?localStorage.getItem("theme")==="dark":"auto"==="auto"?window.matchMedia("(prefers-color-scheme: dark)").matches:"auto"==="dark")&&document.body.setAttribute("theme","dark")</script><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title=阿先妙妙屋>阿先妙妙屋</a></div><div class=menu><div class=menu-inner><a class=menu-item href=/>主页 </a><a class=menu-item href=/posts/>文章 </a><a class=menu-item href=/translations/>翻译 </a><a class=menu-item href=/logging/>日志 </a><a class=menu-item href=/tags/>标签 </a><a class=menu-item href=/categories/>分类 </a><a class=menu-item href=/about/>关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop>
-<input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
-<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索><i class="fas fa-search fa-fw" aria-hidden=true></i>
-</a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空><i class="fas fa-times-circle fa-fw" aria-hidden=true></i>
-</a><span class="search-button search-loading" id=search-loading-desktop><i class="fas fa-spinner fa-fw fa-spin" aria-hidden=true></i>
-</span></span><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题><i class="fas fa-adjust fa-fw" aria-hidden=true></i></a></div></div></div></header><header class=mobile id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title=阿先妙妙屋>阿先妙妙屋</a></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><div class=menu id=menu-mobile><div class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder=搜索文章标题或内容... id=search-input-mobile>
-<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索><i class="fas fa-search fa-fw" aria-hidden=true></i>
-</a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空><i class="fas fa-times-circle fa-fw" aria-hidden=true></i>
-</a><span class="search-button search-loading" id=search-loading-mobile><i class="fas fa-spinner fa-fw fa-spin" aria-hidden=true></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>取消</a></div><a class=menu-item href=/ title>主页</a><a class=menu-item href=/posts/ title>文章</a><a class=menu-item href=/translations/ title>翻译</a><a class=menu-item href=/logging/ title>日志</a><a class=menu-item href=/tags/ title>标签</a><a class=menu-item href=/categories/ title>分类</a><a class=menu-item href=/about/ title>关于</a><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
-<i class="fas fa-adjust fa-fw" aria-hidden=true></i></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class="page single special"><h1 class="single-title animate__animated animate__pulse animate__faster">翻译：OpenCV相机标定</h1><div class=content id=content><div class="details admonition info"><div class="details-summary admonition-title"><i class="icon fas fa-info-circle fa-fw" aria-hidden=true></i>FYI<i class="details-icon fas fa-angle-right fa-fw" aria-hidden=true></i></div><div class=details-content><div class=admonition-content>原文来自OpenCV官方文档[^1]，本人在翻译过程中进行了简单加工和信息补充。如果您认为侵犯了您的合法权益，请与我联系，我将删除本文。</div></div></div><h2 id=本文目标>本文目标</h2><p>通过本文，我们将会学习与如何使用OpenCV进行相机标定相关的知识。具体的：</p><ol><li>由相机导致的图像畸变有哪些类型；</li><li>如何通过计算得到相机的内参矩阵和外参矩阵；</li><li>如何利用相机的内参矩阵和外参矩阵对图像进行消畸变。</li></ol><h2 id=基础知识>基础知识</h2><p>基于小孔成像模型的相机会为所拍摄的图像引入图像畸变问题。其中，最主要的畸变类型是：<strong>径向畸变</strong>（radial distortion）和<strong>切向畸变</strong>（tangential distortion）。</p><p>径向畸变会导致真实场景中的直线变为图像中的曲线。该现象具有越远离图像中心越明显的特点。在图1中，棋盘格两侧使用了两条红色参考线作为对比，可以发现：棋盘格的边缘不再是一条直线；与红色参考线相比，弯曲的线条向图像边缘膨胀；且越靠近图像边缘，线条向外膨胀的现象越明显。如果想要了解更多有关图像畸变的知识，可以参考维基百科中的<a href=https://en.wikipedia.org/wiki/Distortion_%28optics%29 target=_blank rel="noopener noreffer"><strong>光学畸变</strong></a><sup id=fnref:1><a href=#fn:1 class=footnote-ref role=doc-noteref>1</a></sup>一节。</p><figure><img src=/img/calib_radial.jpg><figcaption><h4>图1 径向畸变现象展示</h4></figcaption></figure><p>具体的，径向畸变可以使用下面的公式表示：</p><p>$$
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><title>翻译：OpenCV相机标定 - 阿先妙妙屋</title><meta name=Description content="This is my cool site"><meta property="og:url" content="https://zixianweei.github.io/translations/camera-calibration-using-opencv/">
+<meta property="og:site_name" content="阿先妙妙屋"><meta property="og:title" content="翻译：OpenCV相机标定"><meta property="og:description" content="FYI 原文来自OpenCV官方文档，本人在翻译过程中进行了简单加工和信息补充。如果您认为侵犯了您的合法权益，请与我联系，我将删除本文。 本文目标 通过本文，我们将会学习与如何使用OpenCV进行相机标定相关的知识。具体的： 由相机导致的图像畸变有哪些"><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="translations"><meta property="article:published_time" content="2024-06-24T08:40:36+08:00"><meta property="article:modified_time" content="2024-07-02T14:18:30+08:00"><meta property="article:tag" content="OpenCV"><meta property="og:image" content="https://zixianweei.github.io/avatar.jpeg"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://zixianweei.github.io/avatar.jpeg"><meta name=twitter:title content="翻译：OpenCV相机标定"><meta name=twitter:description content="FYI 原文来自OpenCV官方文档，本人在翻译过程中进行了简单加工和信息补充。如果您认为侵犯了您的合法权益，请与我联系，我将删除本文。 本文目标 通过本文，我们将会学习与如何使用OpenCV进行相机标定相关的知识。具体的： 由相机导致的图像畸变有哪些"><meta name=application-name content="阿先妙妙屋"><meta name=apple-mobile-web-app-title content="阿先妙妙屋"><meta name=theme-color content="map[dark:#252627 iconcolor:#5bbad5 light:#ffffff tilecolor:#da532c]"><meta name=msapplication-TileColor content="#da532c"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://zixianweei.github.io/translations/camera-calibration-using-opencv/><link rel=stylesheet href=/css/style.min.css><link rel=preload href=https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css as=style onload='this.onload=null,this.rel="stylesheet"'><noscript><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css></noscript><link rel=preload href=https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css as=style onload='this.onload=null,this.rel="stylesheet"'><noscript><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css></noscript><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"翻译：OpenCV相机标定","inLanguage":"zh-cn","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/zixianweei.github.io\/translations\/camera-calibration-using-opencv\/"},"image":["https:\/\/zixianweei.github.io\/images\/Apple-Devices-Preview.png"],"genre":"translations","keywords":"OpenCV","wordcount":5068,"url":"https:\/\/zixianweei.github.io\/translations\/camera-calibration-using-opencv\/","datePublished":"2024-06-24T08:40:36+08:00","dateModified":"2024-07-02T14:18:30+08:00","publisher":{"@type":"Organization","name":"zixianweei","logo":"https:\/\/zixianweei.github.io\/images\/avatar150x150.jpg"},"author":{"@type":"Person","name":"zixianweei"},"description":""}</script></head><body data-header-desktop=fixed data-header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem("theme")?localStorage.getItem("theme")==="dark":"auto"==="auto"?window.matchMedia("(prefers-color-scheme: dark)").matches:"auto"==="dark")&&document.body.setAttribute("theme","dark")</script><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title=阿先妙妙屋></a></div><div class=menu><div class=menu-inner><a class=menu-item href=/>主页 </a><a class=menu-item href=/posts/>文章 </a><a class=menu-item href=/translations/>翻译 </a><a class=menu-item href=/tags/>标签 </a><a class=menu-item href=/categories/>分类 </a><a class=menu-item href=/about/>关于 </a><span class="menu-item delimiter"></span><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
+<i class="fas fa-adjust fa-fw" aria-hidden=true></i></a></div></div></div></header><header class=mobile id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title=阿先妙妙屋></a></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><div class=menu id=menu-mobile><a class=menu-item href=/ title>主页</a><a class=menu-item href=/posts/ title>文章</a><a class=menu-item href=/translations/ title>翻译</a><a class=menu-item href=/tags/ title>标签</a><a class=menu-item href=/categories/ title>分类</a><a class=menu-item href=/about/ title>关于</a><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
+<i class="fas fa-adjust fa-fw" aria-hidden=true></i></a></div></div></header><main class=main><div class=container><div class="page single special"><h1 class="single-title animate__animated animate__pulse animate__faster">翻译：OpenCV相机标定</h1><div class=content id=content><div class="details admonition info"><div class="details-summary admonition-title"><i class="icon fas fa-info-circle fa-fw" aria-hidden=true></i>FYI<i class="details-icon fas fa-angle-right fa-fw" aria-hidden=true></i></div><div class=details-content><div class=admonition-content>原文来自<a href=https://docs.opencv.org/4.8.0/dc/dbb/tutorial_py_calibration.html target=_blank rel="noopener noreffer">OpenCV官方文档</a>，本人在翻译过程中进行了简单加工和信息补充。如果您认为侵犯了您的合法权益，请与我联系，我将删除本文。</div></div></div><h2 id=本文目标>本文目标</h2><p>通过本文，我们将会学习与如何使用OpenCV进行相机标定相关的知识。具体的：</p><ol><li>由相机导致的图像畸变有哪些类型；</li><li>如何通过计算得到相机的内参矩阵和外参矩阵；</li><li>如何利用相机的内参矩阵和外参矩阵对图像进行消畸变。</li></ol><h2 id=基础知识>基础知识</h2><p>基于小孔成像模型的相机会为所拍摄的图像引入图像畸变问题。其中，最主要的畸变类型是：<strong>径向畸变</strong>（radial distortion）和<strong>切向畸变</strong>（tangential distortion）。</p><p>径向畸变会导致真实场景中的直线变为图像中的曲线。该现象具有越远离图像中心越明显的特点。在图1中，棋盘格两侧使用了两条红色参考线作为对比，可以发现：棋盘格的边缘不再是一条直线；与红色参考线相比，弯曲的线条向图像边缘膨胀；且越靠近图像边缘，线条向外膨胀的现象越明显。如果想要了解更多有关图像畸变的知识，可以参考维基百科中的<a href=https://en.wikipedia.org/wiki/Distortion_%28optics%29 target=_blank rel="noopener noreffer"><strong>光学畸变</strong></a>一节。</p><figure><img src=/img/calib_radial.jpg style=width:50%><figcaption><h4>图1 径向畸变现象展示</h4></figcaption></figure><p>具体的，径向畸变可以使用下面的公式表示：</p><p>$$
 \begin{align*}
-x_{distorted} &= x(1 + k_{1} r^2 + k_{2} r^4 + k_{3} r^6) \
+x_{distorted} &= x(1 + k_{1} r^2 + k_{2} r^4 + k_{3} r^6), \\
 y_{distorted} &= y(1 + k_{1} r^2 + k_{2} r^4 + k_{3} r^6).
 \end{align*}
 $$</p><p>与径向畸变类似，切向畸变则是由相机镜头所在平面和像平面非严格平行引起的。因此，图像中的部分区域会存在看上去比理论上更靠近的现象。切向畸变可以使用下面的公式表示：</p><p>$$
 \begin{align*}
-x_{distorted} &= x + [2p_{1}xy + p_{2}(r^2+2x^2)] \
+x_{distorted} &= x + [2p_{1}xy + p_{2}(r^2+2x^2)], \\
 y_{distorted} &= y + [p_{1}(r^2+2y^2) + 2p_{2}xy].
 \end{align*}
 $$</p><p>根据径向畸变和切向畸变的表示公式，我们可以使用五个参数表示图像的畸变。这五个参数也被称为<strong>畸变参数</strong>（distortion coefficients）：</p><p>$$
@@ -26,13 +19,10 @@ $$</p><p>除畸变参数外，我们还需要一些额外的信息来完成畸�
 \begin{align*}
 M_{camera} =
 \begin{bmatrix}
-f_x & 0 & c_x \ 0 & f_y & c_y \ 0 & 0 & 1
+f_x & 0 & c_x \\ 0 & f_y & c_y \\ 0 & 0 & 1
 \end{bmatrix}.
 \end{align*}
-$$</p><p>对于外部参数，他通常是由一些旋转和平移的向量组成，用于表示三维空间中物体位置到相机坐标位置的转换。由于每张图像中拍摄的场景都可能存在不同，外部参数往往因拍摄的图像而异。</p><div class="details admonition note open"><div class="details-summary admonition-title"><i class="icon fas fa-pencil-alt fa-fw" aria-hidden=true></i>注意<i class="details-icon fas fa-angle-right fa-fw" aria-hidden=true></i></div><div class=details-content><div class=admonition-content><p><strong>译者注：坐标转换和坐标空间</strong></p><p>这里可以参考图形学渲染管线中的顶点处理阶段进行理解。在变换过程中主要涉及五种坐标空间，目的是为了将三维空间中的物体投影到相机平面中。相关信息可以查阅LearnOpenGL[^3]。</p></div></div></div><p>对于立体视觉应用，图像畸变是首先需要被消除和矫正的，否则会引起后续处理流程的误差累计或产生错误结果。为了得到用于消除图像畸变的参数，我们需要使用相机拍摄一些精心设计场景。其中，最为常见的场景是棋盘格图像。在精心设计的场景中，我们能够预先知道真实世界中的关键点坐标信息，也可以通过图像处理的方式得到关键点在图像中的相应坐标信息。通过多个这样的信息对，就可以计算得到用于消畸变的畸变参数、相机内外参数等。一般来说，为了得到更好的结果，往往需要对相同的场景拍摄至少10张不同角度的测试图像。</p><h2 id=代码详解>代码详解</h2><p>如第二节最后所述，我们需要至少10张测试图像用于相机标定。OpenCV的仓库中提供了一组棋盘格图像用于展示相机标定的过程，他们位于仓库的<code>samples/data</code>目录下，名称为<code>left*.jpg</code>。考虑其中任意一张棋盘格图像，我们需要知道的关键信息是一组三维世界中点的坐标和与之对应的二维图像中的坐标。其中，二维图像中点的坐标十分容易获的，他们就是棋盘格图像中任意两个白色或黑色方块的接触点。</p><p>对于三维世界中点的坐标，由于每次拍摄时相机和棋盘格图像之间的相对位置不同，我们需要知道他们的$(x, y, z)$坐标。但为了简单起见，我们可以认为拍摄时棋盘格始终位于$XY$坐标平面内，即所有三维世界中点的$z$坐标均为0。此时，实际情况下$z$坐标的变化认为是由相机沿光轴方向前后移动引起的。通过模型的简化，我们在相机标定时仅需知道三维世界中点的$(x,y)$坐标即可。此外，我们还可以进一步简化这些坐标：由于棋盘格大小是已知且固定的，我们就可以使用一组二维索引表示世界中点的坐标，如$(0, 0)$，$(0, 1)$，$(0, 2)$…… 通过索引值计算得到的结果是真实结果的缩放值。若此时可以知道棋盘格方块实际大小，就能够得到三维世界中点的真实坐标。对于本文的示例场景，由于我们并未实际拍摄图像，并不知晓棋盘格方块的大小，所以略过了棋盘格图像块大小的参数（该参数的单位一般是$mm$）。</p><p>一般来说，三维世界中点的坐标被称为<strong>物点</strong>，二维图像中点的坐标被称为<strong>像点</strong>。</p><h3 id=准备阶段>准备阶段</h3><p>为了能够搜索到棋盘格图像中的像点，我们使用<code>cv2.findChessboardCorners()</code>函数进行处理。该函数需要我们指定棋盘格图像的像点排列情况，如$8\times 8$或$5 \times 5$大小的棋盘格。在本文的示例中，我们使用的是$7\times 6$排列情况的棋盘格。通常情况下，一个$8\times 8$排列情况的棋盘格能够找到$7 \times 7$个像点。函数运行后会返回一个表示是否找到指定排列模式的标志位<code>retval</code>。如果<code>retval</code>为<code>True</code>，表示函数找了指定的像点集合。并且该函数返回的像点集合会按顺序排列，例如从左到右从上到下的顺序。</p><p>!!! info &ldquo;小提示&rdquo;</p><pre><code>在给定一组棋盘格图像后，该函数可能无法在任何一张图像中找到符合要求的像点。因此，较好的做法是：启动相机并拍摄图像后，就使用该函数进行像点的检测；一旦能够在拍摄的图像中找到符合要求的像点，就将结果保存到数组中。此外，在两次拍摄之间，可以预留一些时间，用于调整棋盘格的位置和方向。通过重复上述过程，直到所需的物像点对数满足要求。即使是本文使用的13张图像，我们也无法保证每张图像都能够找到物像点对。因此，我们的做法是：读取所有的图像并逐个检测，然后只选取其中能够检测出符合要求像点的图像进行后续处理。除了棋盘格标定板外，我们还可以使用圆形阵列标定板。此时，可以使用`cv2.findCirclesGrid()`函数搜索符合要求的像点，并且圆形阵列标定板可以使用更少的图像数量完成相机标定。
-</code></pre><p>??? note &ldquo;译者注：OpenCV中支持的标定板类型&rdquo;</p><pre><code>截止4.8.0版本，OpenCV的API中支持了棋盘格、圆形网格和CharuCo三种标定板[^4]。
-</code></pre><p>??? note &ldquo;译者注：棋盘格的角点排列&rdquo;</p><pre><code>一般来说，拍摄长宽两个方向上具有不同方块数的棋盘格。若长宽方块数量相同，得到的结果存在二义性，无法分辨是没有旋转的结果，还是旋转了$180^{\circ}$的结果。
-</code></pre><p>对于搜索到像点，我们可以使用<code>cv2.cornerSubPix()</code>来进一步提高他们的坐标精度。此外，还可以使用<code>cv2.drawChessboardCorners</code>在图像中绘制精细化后的有序像点集合。上述的所有流程都可以使用下面的代码完成功能实现。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+$$</p><p>对于外部参数，他通常是由一些旋转和平移的向量组成，用于表示三维空间中物体位置到相机坐标位置的转换。由于每张图像中拍摄的场景都可能存在不同，外部参数往往因拍摄的图像而异。</p><div class="details admonition note"><div class="details-summary admonition-title"><i class="icon fas fa-pencil-alt fa-fw" aria-hidden=true></i>译者注：坐标转换和坐标空间<i class="details-icon fas fa-angle-right fa-fw" aria-hidden=true></i></div><div class=details-content><div class=admonition-content>这里可以参考图形学渲染管线中的顶点处理阶段进行理解。在变换过程中主要涉及五种坐标空间，目的是为了将三维空间中的物体投影到相机平面中。相关信息可以查阅<a href=https://learnopengl-cn.github.io/01%20Getting%20started/08%20Coordinate%20Systems/ target=_blank rel="noopener noreffer">LearnOpenGL</a>。</div></div></div><p>对于立体视觉应用，图像畸变是首先需要被消除和矫正的，否则会引起后续处理流程的误差累计或产生错误结果。为了得到用于消除图像畸变的参数，我们需要使用相机拍摄一些精心设计场景。其中，最为常见的场景是棋盘格图像。在精心设计的场景中，我们能够预先知道真实世界中的关键点坐标信息，也可以通过图像处理的方式得到关键点在图像中的相应坐标信息。通过多个这样的信息对，就可以计算得到用于消畸变的畸变参数、相机内外参数等。一般来说，为了得到更好的结果，往往需要对相同的场景拍摄至少10张不同角度的测试图像。</p><h2 id=代码详解>代码详解</h2><p>如第二节最后所述，我们需要至少10张测试图像用于相机标定。OpenCV的仓库中提供了一组棋盘格图像用于展示相机标定的过程，他们位于仓库的<code>samples/data</code>目录下，名称为<code>left*.jpg</code>。考虑其中任意一张棋盘格图像，我们需要知道的关键信息是一组三维世界中点的坐标和与之对应的二维图像中的坐标。其中，二维图像中点的坐标十分容易获的，他们就是棋盘格图像中任意两个白色或黑色方块的接触点。</p><p>对于三维世界中点的坐标，由于每次拍摄时相机和棋盘格图像之间的相对位置不同，我们需要知道他们的$(x, y, z)$坐标。但为了简单起见，我们可以认为拍摄时棋盘格始终位于$XY$坐标平面内，即所有三维世界中点的$z$坐标均为0。此时，实际情况下$z$坐标的变化认为是由相机沿光轴方向前后移动引起的。通过模型的简化，我们在相机标定时仅需知道三维世界中点的$(x,y)$坐标即可。此外，我们还可以进一步简化这些坐标：由于棋盘格大小是已知且固定的，我们就可以使用一组二维索引表示世界中点的坐标，如$(0, 0)$，$(0, 1)$，$(0, 2)$…… 通过索引值计算得到的结果是真实结果的缩放值。若此时可以知道棋盘格方块实际大小，就能够得到三维世界中点的真实坐标。对于本文的示例场景，由于我们并未实际拍摄图像，并不知晓棋盘格方块的大小，所以略过了棋盘格图像块大小的参数（该参数的单位一般是$mm$）。</p><p>一般来说，三维世界中点的坐标被称为<strong>物点</strong>，二维图像中点的坐标被称为<strong>像点</strong>。</p><h3 id=准备阶段>准备阶段</h3><p>为了能够搜索到棋盘格图像中的像点，我们使用<code>cv2.findChessboardCorners()</code>函数进行处理。该函数需要我们指定棋盘格图像的像点排列情况，如$8\times 8$或$5 \times 5$大小的棋盘格。在本文的示例中，我们使用的是$7\times 6$排列情况的棋盘格。通常情况下，一个$8\times 8$排列情况的棋盘格能够找到$7 \times 7$个像点。函数运行后会返回一个表示是否找到指定排列模式的标志位<code>retval</code>。如果<code>retval</code>为<code>True</code>，表示函数找了指定的像点集合。并且该函数返回的像点集合会按顺序排列，例如从左到右从上到下的顺序。</p><div class="details admonition note"><div class="details-summary admonition-title"><i class="icon fas fa-pencil-alt fa-fw" aria-hidden=true></i>小提示<i class="details-icon fas fa-angle-right fa-fw" aria-hidden=true></i></div><div class=details-content><div class=admonition-content>在给定一组棋盘格图像后，该函数可能无法在任何一张图像中找到符合要求的像点。因此，较好的做法是：启动相机并拍摄图像后，就使用该函数进行像点的检测；一旦能够在拍摄的图像中找到符合要求的像点，就将结果保存到数组中。此外，在两次拍摄之间，可以预留一些时间，用于调整棋盘格的位置和方向。通过重复上述过程，直到所需的物像点对数满足要求。即使是本文使用的13张图像，我们也无法保证每张图像都能够找到物像点对。因此，我们的做法是：读取所有的图像并逐个检测，然后只选取其中能够检测出符合要求像点的图像进行后续处理。除了棋盘格标定板外，我们还可以使用圆形阵列标定板。此时，可以使用<code>cv2.findCirclesGrid()</code>函数搜索符合要求的像点，并且圆形阵列标定板可以使用更少的图像数量完成相机标定。</div></div></div><div class="details admonition note"><div class="details-summary admonition-title"><i class="icon fas fa-pencil-alt fa-fw" aria-hidden=true></i>译者注：OpenCV中支持的标定板类型<i class="details-icon fas fa-angle-right fa-fw" aria-hidden=true></i></div><div class=details-content><div class=admonition-content>截止4.8.0版本，OpenCV的API中支持了棋盘格、圆形网格和CharuCo三种标定板。来源：<a href=https://zhuanlan.zhihu.com/p/353316030 target=_blank rel="noopener noreffer">知乎</a></div></div></div><div class="details admonition note"><div class="details-summary admonition-title"><i class="icon fas fa-pencil-alt fa-fw" aria-hidden=true></i>译者注：棋盘格的角点排列<i class="details-icon fas fa-angle-right fa-fw" aria-hidden=true></i></div><div class=details-content><div class=admonition-content>一般来说，拍摄长宽两个方向上具有不同方块数的棋盘格。若长宽方块数量相同，得到的结果存在二义性，无法分辨是没有旋转的结果，还是旋转了$180^{\circ}$的结果。</div></div></div><p>对于搜索到像点，我们可以使用<code>cv2.cornerSubPix()</code>来进一步提高他们的坐标精度。此外，还可以使用<code>cv2.drawChessboardCorners</code>在图像中绘制精细化后的有序像点集合。上述的所有流程都可以使用下面的代码完成功能实现。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -88,7 +78,7 @@ $$</p><p>对于外部参数，他通常是由一些旋转和平移的向量组�
 </span></span><span class=line><span class=cl>        <span class=n>cv2</span><span class=o>.</span><span class=n>imshow</span><span class=p>(</span><span class=s2>&#34;img&#34;</span><span class=p>,</span> <span class=n>img</span><span class=p>)</span>
 </span></span><span class=line><span class=cl>        <span class=n>cv2</span><span class=o>.</span><span class=n>waitKey</span><span class=p>(</span><span class=mi>500</span><span class=p>)</span>
 </span></span><span class=line><span class=cl><span class=n>cv2</span><span class=o>.</span><span class=n>destroyAllWindows</span><span class=p>()</span>
-</span></span></code></pre></td></tr></table></div></div><p>对于任意一张棋盘格图像，搜索像点并将像点绘制在棋盘格图像中的结果如图2所示。</p><figure><img src=/img/calib_pattern.jpg><figcaption><h4>图2 有序像点的可视化</h4></figcaption></figure><h3 id=标定参数>标定参数</h3><p>至此，我们已经得到了用于相机的标定的关键信息：物像点对。接下来，我们将使用<code>cv2.calibrateCamera()</code>函数完成相机的标定过程，得到相机的内外参数以及畸变参数。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></span></code></pre></td></tr></table></div></div><p>对于任意一张棋盘格图像，搜索像点并将像点绘制在棋盘格图像中的结果如图2所示。</p><figure><img src=/img/calib_pattern.jpg style=width:50%><figcaption><h4>图2 有序像点的可视化</h4></figcaption></figure><h3 id=标定参数>标定参数</h3><p>至此，我们已经得到了用于相机的标定的关键信息：物像点对。接下来，我们将使用<code>cv2.calibrateCamera()</code>函数完成相机的标定过程，得到相机的内外参数以及畸变参数。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span><span class=lnt>4
@@ -100,8 +90,7 @@ $$</p><p>对于外部参数，他通常是由一些旋转和平移的向量组�
 </span></span><span class=line><span class=cl><span class=c1># rvecs - 旋转向量</span>
 </span></span><span class=line><span class=cl><span class=c1># tvecs - 平移向量</span>
 </span></span><span class=line><span class=cl><span class=n>ret</span><span class=p>,</span> <span class=n>mtx</span><span class=p>,</span> <span class=n>dist</span><span class=p>,</span> <span class=n>rvecs</span><span class=p>,</span> <span class=n>tvecs</span> <span class=o>=</span> <span class=n>cv2</span><span class=o>.</span><span class=n>calibrateCamera</span><span class=p>(</span><span class=n>objpoints</span><span class=p>,</span> <span class=n>imgpoints</span><span class=p>,</span> <span class=n>gray</span><span class=o>.</span><span class=n>shape</span><span class=p>[::</span><span class=o>-</span><span class=mi>1</span><span class=p>],</span> <span class=kc>None</span><span class=p>,</span> <span class=kc>None</span><span class=p>)</span>
-</span></span></code></pre></td></tr></table></div></div><p>??? note &ldquo;译者注：张氏标定法&rdquo;</p><pre><code>感兴趣的同学可以查看张正友老师于1998年发表的论文，其中详细解释了相机标定的过程和数学推导[^5]。
-</code></pre><h3 id=图像消畸变>图像消畸变</h3><p>在获得了相机标定参数后，我们就能够完成图像消畸变任务了。并且，OpenCV提供了两种方式来完成这项任务：使用<code>cv2.undistort()</code>函数和使用<code>cv2.remap()</code>函数。但在此之前，我们可以使用<code>cv2.getOptimalNewCameraMatrix()</code>函数对相机内部参数和畸变参数进行优化，优化的结果由自由度参数$\alpha$控制。消畸变时，会利用标定参数生成变换矩阵对图像进行修改。这一过程中，图像的边缘可能会出现黑边现象。当优化自由度参数$\alpha=0$时，该函数将会返回一组能够让黑边变得最小的标定参数，此时图像的边缘可能会丢失一些含有信息的像素；当优化自由度参数$\alpha=1$时，该函数不会针对黑边进行优化，此时消畸变的结果会包含黑边。此外，该函数还会返回一个图像的ROI，用于将图像的黑边裁剪移除。</p><p>现在，我们可以读取待处理图像，然后使用<code>cv2.getOptimalNewCameraMatrix()</code>函数优化相机的内部参数和畸变参数。本文使用的是名为<code>left12.jpg</code>的图像，也就是本文的图1。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></span></code></pre></td></tr></table></div></div><div class="details admonition note"><div class="details-summary admonition-title"><i class="icon fas fa-pencil-alt fa-fw" aria-hidden=true></i>译者注：张氏标定法<i class="details-icon fas fa-angle-right fa-fw" aria-hidden=true></i></div><div class=details-content><div class=admonition-content>感兴趣的同学可以查看张正友老师于1998年发表的论文<a href=https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/tr98-71.pdf target=_blank rel="noopener noreffer">A Flexible New Technique for Camera Calibration</a>，其中详细解释了相机标定的过程和数学推导。</div></div></div><h3 id=图像消畸变>图像消畸变</h3><p>在获得了相机标定参数后，我们就能够完成图像消畸变任务了。并且，OpenCV提供了两种方式来完成这项任务：使用<code>cv2.undistort()</code>函数和使用<code>cv2.remap()</code>函数。但在此之前，我们可以使用<code>cv2.getOptimalNewCameraMatrix()</code>函数对相机内部参数和畸变参数进行优化，优化的结果由自由度参数$\alpha$控制。消畸变时，会利用标定参数生成变换矩阵对图像进行修改。这一过程中，图像的边缘可能会出现黑边现象。当优化自由度参数$\alpha=0$时，该函数将会返回一组能够让黑边变得最小的标定参数，此时图像的边缘可能会丢失一些含有信息的像素；当优化自由度参数$\alpha=1$时，该函数不会针对黑边进行优化，此时消畸变的结果会包含黑边。此外，该函数还会返回一个图像的ROI，用于将图像的黑边裁剪移除。</p><p>现在，我们可以读取待处理图像，然后使用<code>cv2.getOptimalNewCameraMatrix()</code>函数优化相机的内部参数和畸变参数。本文使用的是名为<code>left12.jpg</code>的图像，也就是本文的图1。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=n>img</span> <span class=o>=</span> <span class=n>cv2</span><span class=o>.</span><span class=n>imread</span><span class=p>(</span><span class=s1>&#39;left12.jpg&#39;</span><span class=p>)</span>
@@ -133,7 +122,7 @@ $$</p><p>对于外部参数，他通常是由一些旋转和平移的向量组�
 </span></span><span class=line><span class=cl><span class=n>x</span><span class=p>,</span> <span class=n>y</span><span class=p>,</span> <span class=n>w</span><span class=p>,</span> <span class=n>h</span> <span class=o>=</span> <span class=n>roi</span>
 </span></span><span class=line><span class=cl><span class=n>dst</span> <span class=o>=</span> <span class=n>dst</span><span class=p>[</span><span class=n>y</span><span class=p>:</span><span class=n>y</span><span class=o>+</span><span class=n>h</span><span class=p>,</span> <span class=n>x</span><span class=p>:</span><span class=n>x</span><span class=o>+</span><span class=n>w</span><span class=p>]</span>
 </span></span><span class=line><span class=cl><span class=n>cv2</span><span class=o>.</span><span class=n>imwrite</span><span class=p>(</span><span class=s1>&#39;calibresult.png&#39;</span><span class=p>,</span> <span class=n>dst</span><span class=p>)</span>
-</span></span></code></pre></td></tr></table></div></div><p>但无论使用哪种方式，都能够得到相同的消畸变结果。本文图1的消畸变结果如图3所示。可以发现：图像中原本向边缘膨胀的线条变直了。在完成相机标定和优化后，可以使用numpy中的<code>numpy.savez()</code>或<code>numpy.savetxt()</code>方法保存相机内外参数和畸变参数，以便后续读取使用。</p><figure><img src=/img/calib_result.jpg><figcaption><h4>图3 图像消畸变结果示例</h4></figcaption></figure><h3 id=重投影误差>重投影误差</h3><p>重投影误差可以用于估计用于图像消畸变参数的好坏：重投影误差越接近于零，说明消畸变参数越精确。在计算得到相机的内外参数和畸变参数后，我们可以使用<code>cv2.projectPoints</code>函数将物点转换到二维空间得到理论像点；然后，计算理论像点和实际像点之间坐标的欧式距离；最后，计算所有理论像点和实际像点之间欧式距离的算术均值作为重投影误差。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></span></code></pre></td></tr></table></div></div><p>但无论使用哪种方式，都能够得到相同的消畸变结果。本文图1的消畸变结果如图3所示。可以发现：图像中原本向边缘膨胀的线条变直了。在完成相机标定和优化后，可以使用numpy中的<code>numpy.savez()</code>或<code>numpy.savetxt()</code>方法保存相机内外参数和畸变参数，以便后续读取使用。</p><figure><img src=/img/calib_result.jpg style=width:50%><figcaption><h4>图3 图像消畸变结果示例</h4></figcaption></figure><h3 id=重投影误差>重投影误差</h3><p>重投影误差可以用于估计用于图像消畸变参数的好坏：重投影误差越接近于零，说明消畸变参数越精确。在计算得到相机的内外参数和畸变参数后，我们可以使用<code>cv2.projectPoints</code>函数将物点转换到二维空间得到理论像点；然后，计算理论像点和实际像点之间坐标的欧式距离；最后，计算所有理论像点和实际像点之间欧式距离的算术均值作为重投影误差。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span><span class=lnt>4
@@ -145,164 +134,307 @@ $$</p><p>对于外部参数，他通常是由一些旋转和平移的向量组�
 </span></span><span class=line><span class=cl>    <span class=n>error</span> <span class=o>=</span> <span class=n>cv2</span><span class=o>.</span><span class=n>norm</span><span class=p>(</span><span class=n>imgpoints</span><span class=p>[</span><span class=n>i</span><span class=p>],</span> <span class=n>imgpoints2</span><span class=p>,</span> <span class=n>cv2</span><span class=o>.</span><span class=n>NORM_L2</span><span class=p>)</span><span class=o>/</span><span class=nb>len</span><span class=p>(</span><span class=n>imgpoints2</span><span class=p>)</span>
 </span></span><span class=line><span class=cl>    <span class=n>mean_error</span> <span class=o>+=</span> <span class=n>error</span>
 </span></span><span class=line><span class=cl><span class=nb>print</span><span class=p>(</span> <span class=s2>&#34;total error: </span><span class=si>{}</span><span class=s2>&#34;</span><span class=o>.</span><span class=n>format</span><span class=p>(</span><span class=n>mean_error</span><span class=o>/</span><span class=nb>len</span><span class=p>(</span><span class=n>objpoints</span><span class=p>))</span> <span class=p>)</span>
-</span></span></code></pre></td></tr></table></div></div><h2 id=完整的代码>完整的代码</h2><p>??? &ldquo;使用C++和Python实现的完整测试代码&rdquo;</p><pre><code>=== &quot;C++&quot;
-
-    ```cpp linenums=&quot;1&quot;
-    #include &lt;iostream&gt;
-    #include &lt;memory&gt;
-    #include &lt;vector&gt;
-    
-    #include &lt;opencv2/opencv.hpp&gt;
-    
-    int main() {
-      std::vector&lt;std::string&gt; inputPaths;  // 需要给定输入图像组
-    
-      std::vector&lt;cv::Mat&gt; inputImages;
-      inputImages.reserve(inputPaths.size());
-      for (const auto&amp; inputPath : inputPaths) {
-        cv::Mat inputImage = cv::imread(inputPath);
-        if (inputImage.empty()) {
-          std::cout &lt;&lt; &quot;Input image is empty. [&quot; &lt;&lt; inputPath &lt;&lt; &quot;]\n&quot;;
-          return EXIT_FAILURE;
-        }
-        inputImages.push_back(inputImage);
-      }
-    
-      size_t imageCount = inputImages.size();
-    
-      std::vector&lt;cv::Mat&gt; inputGrayImages;
-      inputGrayImages.reserve(inputImages.size());
-      for (const auto&amp; inputImage : inputImages) {
-        cv::Mat inputGrayImage;
-        cv::cvtColor(inputImage, inputGrayImage, cv::COLOR_BGR2GRAY);
-        inputGrayImages.push_back(inputGrayImage);
-      }
-    
-      static std::vector&lt;cv::Point3f&gt; objectPoint = [](const cv::Size&amp; size) {
-        std::vector&lt;cv::Point3f&gt; points;
-        for (auto h = 0; h &lt; size.height; h++) {
-          for (auto w = 0; w &lt; size.width; w++) {
-            points.emplace_back(w, h, 0.F);
-          }
-        }
-        return points;
-      }(cv::Size(7, 6));
-    
-      std::vector&lt;std::vector&lt;cv::Point3f&gt;&gt; objectPoints;
-      objectPoints.reserve(inputImages.size());
-      std::vector&lt;std::vector&lt;cv::Point2f&gt;&gt; imagePoints;
-      imagePoints.reserve(inputImages.size());
-      const cv::Size patternSize(7, 6);
-      const auto criteria = cv::TermCriteria(
-          cv::TermCriteria::Type::EPS + cv::TermCriteria::Type::MAX_ITER, 30,
-          0.001);
-      for (size_t i = 0; i &lt; imageCount; i++) {
-        std::cout &lt;&lt; inputPaths[i] &lt;&lt; std::endl;
-        std::vector&lt;cv::Point2f&gt; corners;
-        auto ret =
-            cv::findChessboardCorners(inputGrayImages[i], patternSize, corners);
-        if (ret) {
-          objectPoints.push_back(objectPoint);
-          cv::cornerSubPix(inputGrayImages[i], corners, cv::Size(11, 11),
-                           cv::Size(-1, -1), criteria);
-          imagePoints.push_back(corners);
-        }
-      }
-    
-      auto imageSize = inputGrayImages.front().size();
-    
-      cv::Mat cameraMatrix;
-      cv::Mat distCoeffs;
-      std::vector&lt;cv::Mat&gt; rvecs;
-      std::vector&lt;cv::Mat&gt; tvecs;
-      auto ret = cv::calibrateCamera(objectPoints, imagePoints, imageSize,
-                                     cameraMatrix, distCoeffs, rvecs, tvecs);
-      std::cout &lt;&lt; &quot;Total error: &quot; &lt;&lt; ret &lt;&lt; &quot;\n&quot;;
-    
-      cv::Rect validPixROI;
-      auto newCameraMatrix = cv::getOptimalNewCameraMatrix(
-          cameraMatrix, distCoeffs, imageSize, 1.F, imageSize, &amp;validPixROI);
-    
-      for (size_t i = 0; i &lt; imageCount; i++) {
-        cv::Mat undistortImage;
-        cv::undistort(inputImages[i], undistortImage, cameraMatrix, distCoeffs,
-                      newCameraMatrix);
-        std::string outputImageName =
-            &quot;undistortImage_&quot; + std::to_string(i) + &quot;.png&quot;;
-        cv::imwrite(outputImageName, undistortImage(validPixROI));
-      }
-    
-      float meanError = 0.F;
-      for (size_t i = 0; i &lt; objectPoints.size(); i++) {
-        std::vector&lt;cv::Point2f&gt; objectProjectToImagePoints;
-        cv::projectPoints(objectPoints[i], rvecs[i], tvecs[i], cameraMatrix,
-                          distCoeffs, objectProjectToImagePoints);
-        auto error =
-            cv::norm(imagePoints[i], objectProjectToImagePoints, cv::NORM_L2);
-        error /= objectProjectToImagePoints.size();
-        meanError += error;
-      }
-    
-      meanError /= objectPoints.size();
-      std::cout &lt;&lt; &quot;Total error: &quot; &lt;&lt; ret &lt;&lt; &quot;\n&quot;;
-    
-      return 0;
-    }
-    ```
-
-=== &quot;Python&quot;
-    
-    ```python linenums=&quot;1&quot;
-    import cv2
-    import glob
-    import numpy as np
-    from pprint import pprint
-    
-    criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
-    
-    obj_point = np.zeros((6 * 7, 3), np.float32)
-    obj_point[:, :2] = np.mgrid[0:7, 0:6].T.reshape(-1, 2)
-    
-    obj_points = []
-    img_points = []
-    
-    image_names = [] # 需要给定输入图像组
-    
-    (w, h) = (0, 0)
-    
-    for image_name in image_names:
-        pprint(&quot;Current image: [{}]&quot;.format(image_name))
-        image = cv2.imread(image_name)
-        image_gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        (w, h) = image_gray.shape[::-1]
-    
-        ret, corners = cv2.findChessboardCorners(image_gray, (7, 6), None)
-        # ret, corners = cv2.findCirclesGrid(image_gray, (7, 6), None)
-        if ret is True:
-            obj_points.append(obj_point)
-            corners_refined = cv2.cornerSubPix(image_gray, corners, (11, 11), (-1, -1), criteria)
-            img_points.append(corners_refined)
-    
-    pprint(&quot;Image w = {}, h = {}&quot;.format(w, h))
-    ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(obj_points, img_points, (w, h), None, None)
-    
-    # undistortion
-    image = cv2.imread(image_names[0])
-    new_camera_mtx, roi = cv2.getOptimalNewCameraMatrix(mtx, dist, (w, h), 1, (w, h))
-    dst = cv2.undistort(image, mtx, dist, None, new_camera_mtx)
-    
-    # x, y, w, h = roi
-    # dst = dst[y: y+h, x: x+w]
-    cv2.imwrite(&quot;calibresult.png&quot;, dst)
-    
-    # reprojection error
-    mean_error = 0
-    for i in range(len(obj_points)):
-        img_points2, _ = cv2.projectPoints(obj_points[i], rvecs[i], tvecs[i], mtx, dist)
-        error = cv2.norm(img_points[i], img_points2, cv2.NORM_L2) / len(img_points2)
-        print(error)
-        mean_error += error
-    pprint(&quot;Total error: {}&quot;.format(mean_error / len(obj_points)))
-    ```
-</code></pre><div class=footnotes role=doc-endnotes><hr><ol><li id=fn:1><p><a href=https://en.wikipedia.org/wiki/Distortion_%28optics%29 target=_blank rel="noopener noreffer">Distortion (optics)</a>&#160;<a href=#fnref:1 class=footnote-backref role=doc-backlink>&#8617;&#xfe0e;</a></p></li></ol></div></div><div id=comments><div id=giscus class=comment></div><noscript>Please enable JavaScript to view the comments powered by <a href=https://giscus.app>Giscus</a>.</noscript></div></div></div></main><footer class=footer><div class=footer-container><div class=footer-line itemscope itemtype=http://schema.org/CreativeWork><i class="far fa-copyright fa-fw" aria-hidden=true></i><span itemprop=copyrightYear>2020 - 2024</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=mailto:zixianwei@foxmail.com target=_blank>zixianweei</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div></div></footer></div><div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title=回到顶部><i class="fas fa-arrow-up fa-fw" aria-hidden=true></i>
-</a><a href=# id=view-comments class=fixed-button title=查看评论><i class="fas fa-comment fa-fw" aria-hidden=true></i></a></div><link rel=stylesheet href=/lib/katex/katex.min.css><link rel=stylesheet href=/lib/cookieconsent/cookieconsent.min.css><script type=text/javascript src=/lib/autocomplete/autocomplete.min.js></script><script type=text/javascript src=/lib/lunr/lunr.min.js></script><script type=text/javascript src=/lib/lunr/lunr.stemmer.support.min.js></script><script type=text/javascript src=/lib/lunr/lunr.zh.min.js></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.js></script><script type=text/javascript src=/lib/twemoji/twemoji.min.js></script><script type=text/javascript src=/lib/clipboard/clipboard.min.js></script><script type=text/javascript src=/lib/katex/katex.min.js></script><script type=text/javascript src=/lib/katex/contrib/auto-render.min.js></script><script type=text/javascript src=/lib/katex/contrib/copy-tex.min.js></script><script type=text/javascript src=/lib/katex/contrib/mhchem.min.js></script><script type=text/javascript src=/lib/cookieconsent/cookieconsent.min.js></script><script type=text/javascript>window.config={code:{copyTitle:"复制到剪贴板",maxShownLines:50},comment:{giscus:{category:"General",categoryId:"DIC_kwDOLsbaB84CemWN",darkTheme:"dark",emitMetadata:"0",inputPosition:"bottom",lang:"zh-CN",lazyLoading:!1,lightTheme:"light",mapping:"pathname",reactionsEnabled:"1",repo:"zixianweei/zixianweei.github.io",repoId:"R_kgDOLsbaBw"}},cookieconsent:{content:{dismiss:"同意",link:"了解更多",message:"本网站使用 Cookies 来改善您的浏览体验."},enable:!0,palette:{button:{background:"#f0f0f0"},popup:{background:"#1aa3ff"}},theme:"edgeless"},math:{delimiters:[{display:!0,left:"$$",right:"$$"},{display:!0,left:"\\[",right:"\\]"},{display:!0,left:"\\begin{equation}",right:"\\end{equation}"},{display:!0,left:"\\begin{equation*}",right:"\\end{equation*}"},{display:!0,left:"\\begin{align}",right:"\\end{align}"},{display:!0,left:"\\begin{align*}",right:"\\end{align*}"},{display:!0,left:"\\begin{alignat}",right:"\\end{alignat}"},{display:!0,left:"\\begin{alignat*}",right:"\\end{alignat*}"},{display:!0,left:"\\begin{gather}",right:"\\end{gather}"},{display:!0,left:"\\begin{CD}",right:"\\end{CD}"},{display:!1,left:"$",right:"$"},{display:!1,left:"\\(",right:"\\)"}],strict:!1},search:{highlightTag:"em",lunrIndexURL:"/index.json",lunrLanguageCode:"zh",lunrSegmentitURL:"/lib/lunr/lunr.segmentit.js",maxResultLength:10,noResultsFound:"没有找到结果",snippetLength:50,type:"lunr"},twemoji:!0}</script><script type=text/javascript src=/js/theme.min.js></script></body></html>
+</span></span></code></pre></td></tr></table></div></div><h2 id=完整的代码>完整的代码</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>  1
+</span><span class=lnt>  2
+</span><span class=lnt>  3
+</span><span class=lnt>  4
+</span><span class=lnt>  5
+</span><span class=lnt>  6
+</span><span class=lnt>  7
+</span><span class=lnt>  8
+</span><span class=lnt>  9
+</span><span class=lnt> 10
+</span><span class=lnt> 11
+</span><span class=lnt> 12
+</span><span class=lnt> 13
+</span><span class=lnt> 14
+</span><span class=lnt> 15
+</span><span class=lnt> 16
+</span><span class=lnt> 17
+</span><span class=lnt> 18
+</span><span class=lnt> 19
+</span><span class=lnt> 20
+</span><span class=lnt> 21
+</span><span class=lnt> 22
+</span><span class=lnt> 23
+</span><span class=lnt> 24
+</span><span class=lnt> 25
+</span><span class=lnt> 26
+</span><span class=lnt> 27
+</span><span class=lnt> 28
+</span><span class=lnt> 29
+</span><span class=lnt> 30
+</span><span class=lnt> 31
+</span><span class=lnt> 32
+</span><span class=lnt> 33
+</span><span class=lnt> 34
+</span><span class=lnt> 35
+</span><span class=lnt> 36
+</span><span class=lnt> 37
+</span><span class=lnt> 38
+</span><span class=lnt> 39
+</span><span class=lnt> 40
+</span><span class=lnt> 41
+</span><span class=lnt> 42
+</span><span class=lnt> 43
+</span><span class=lnt> 44
+</span><span class=lnt> 45
+</span><span class=lnt> 46
+</span><span class=lnt> 47
+</span><span class=lnt> 48
+</span><span class=lnt> 49
+</span><span class=lnt> 50
+</span><span class=lnt> 51
+</span><span class=lnt> 52
+</span><span class=lnt> 53
+</span><span class=lnt> 54
+</span><span class=lnt> 55
+</span><span class=lnt> 56
+</span><span class=lnt> 57
+</span><span class=lnt> 58
+</span><span class=lnt> 59
+</span><span class=lnt> 60
+</span><span class=lnt> 61
+</span><span class=lnt> 62
+</span><span class=lnt> 63
+</span><span class=lnt> 64
+</span><span class=lnt> 65
+</span><span class=lnt> 66
+</span><span class=lnt> 67
+</span><span class=lnt> 68
+</span><span class=lnt> 69
+</span><span class=lnt> 70
+</span><span class=lnt> 71
+</span><span class=lnt> 72
+</span><span class=lnt> 73
+</span><span class=lnt> 74
+</span><span class=lnt> 75
+</span><span class=lnt> 76
+</span><span class=lnt> 77
+</span><span class=lnt> 78
+</span><span class=lnt> 79
+</span><span class=lnt> 80
+</span><span class=lnt> 81
+</span><span class=lnt> 82
+</span><span class=lnt> 83
+</span><span class=lnt> 84
+</span><span class=lnt> 85
+</span><span class=lnt> 86
+</span><span class=lnt> 87
+</span><span class=lnt> 88
+</span><span class=lnt> 89
+</span><span class=lnt> 90
+</span><span class=lnt> 91
+</span><span class=lnt> 92
+</span><span class=lnt> 93
+</span><span class=lnt> 94
+</span><span class=lnt> 95
+</span><span class=lnt> 96
+</span><span class=lnt> 97
+</span><span class=lnt> 98
+</span><span class=lnt> 99
+</span><span class=lnt>100
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-cpp data-lang=cpp><span class=line><span class=cl><span class=cp>#include</span> <span class=cpf>&lt;iostream&gt;</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp>#include</span> <span class=cpf>&lt;memory&gt;</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp>#include</span> <span class=cpf>&lt;vector&gt;</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp></span>
+</span></span><span class=line><span class=cl><span class=cp>#include</span> <span class=cpf>&lt;opencv2/opencv.hpp&gt;</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp></span>
+</span></span><span class=line><span class=cl><span class=kt>int</span> <span class=nf>main</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=n>std</span><span class=o>::</span><span class=n>vector</span><span class=o>&lt;</span><span class=n>std</span><span class=o>::</span><span class=n>string</span><span class=o>&gt;</span> <span class=n>inputPaths</span><span class=p>;</span>  <span class=c1>// 需要给定输入图像组
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl>  <span class=n>std</span><span class=o>::</span><span class=n>vector</span><span class=o>&lt;</span><span class=n>cv</span><span class=o>::</span><span class=n>Mat</span><span class=o>&gt;</span> <span class=n>inputImages</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=n>inputImages</span><span class=p>.</span><span class=n>reserve</span><span class=p>(</span><span class=n>inputPaths</span><span class=p>.</span><span class=n>size</span><span class=p>());</span>
+</span></span><span class=line><span class=cl>  <span class=k>for</span> <span class=p>(</span><span class=k>const</span> <span class=k>auto</span><span class=o>&amp;</span> <span class=nl>inputPath</span> <span class=p>:</span> <span class=n>inputPaths</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>cv</span><span class=o>::</span><span class=n>Mat</span> <span class=n>inputImage</span> <span class=o>=</span> <span class=n>cv</span><span class=o>::</span><span class=n>imread</span><span class=p>(</span><span class=n>inputPath</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=n>inputImage</span><span class=p>.</span><span class=n>empty</span><span class=p>())</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=n>std</span><span class=o>::</span><span class=n>cout</span> <span class=o>&lt;&lt;</span> <span class=s>&#34;Input image is empty. [&#34;</span> <span class=o>&lt;&lt;</span> <span class=n>inputPath</span> <span class=o>&lt;&lt;</span> <span class=s>&#34;]</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>      <span class=k>return</span> <span class=n>EXIT_FAILURE</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=n>inputImages</span><span class=p>.</span><span class=n>push_back</span><span class=p>(</span><span class=n>inputImage</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=n>size_t</span> <span class=n>imageCount</span> <span class=o>=</span> <span class=n>inputImages</span><span class=p>.</span><span class=n>size</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=n>std</span><span class=o>::</span><span class=n>vector</span><span class=o>&lt;</span><span class=n>cv</span><span class=o>::</span><span class=n>Mat</span><span class=o>&gt;</span> <span class=n>inputGrayImages</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=n>inputGrayImages</span><span class=p>.</span><span class=n>reserve</span><span class=p>(</span><span class=n>inputImages</span><span class=p>.</span><span class=n>size</span><span class=p>());</span>
+</span></span><span class=line><span class=cl>  <span class=k>for</span> <span class=p>(</span><span class=k>const</span> <span class=k>auto</span><span class=o>&amp;</span> <span class=nl>inputImage</span> <span class=p>:</span> <span class=n>inputImages</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>cv</span><span class=o>::</span><span class=n>Mat</span> <span class=n>inputGrayImage</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=n>cv</span><span class=o>::</span><span class=n>cvtColor</span><span class=p>(</span><span class=n>inputImage</span><span class=p>,</span> <span class=n>inputGrayImage</span><span class=p>,</span> <span class=n>cv</span><span class=o>::</span><span class=n>COLOR_BGR2GRAY</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=n>inputGrayImages</span><span class=p>.</span><span class=n>push_back</span><span class=p>(</span><span class=n>inputGrayImage</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=k>static</span> <span class=n>std</span><span class=o>::</span><span class=n>vector</span><span class=o>&lt;</span><span class=n>cv</span><span class=o>::</span><span class=n>Point3f</span><span class=o>&gt;</span> <span class=n>objectPoint</span> <span class=o>=</span> <span class=p>[](</span><span class=k>const</span> <span class=n>cv</span><span class=o>::</span><span class=n>Size</span><span class=o>&amp;</span> <span class=n>size</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>std</span><span class=o>::</span><span class=n>vector</span><span class=o>&lt;</span><span class=n>cv</span><span class=o>::</span><span class=n>Point3f</span><span class=o>&gt;</span> <span class=n>points</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=p>(</span><span class=k>auto</span> <span class=n>h</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>h</span> <span class=o>&lt;</span> <span class=n>size</span><span class=p>.</span><span class=n>height</span><span class=p>;</span> <span class=n>h</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=k>for</span> <span class=p>(</span><span class=k>auto</span> <span class=n>w</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>w</span> <span class=o>&lt;</span> <span class=n>size</span><span class=p>.</span><span class=n>width</span><span class=p>;</span> <span class=n>w</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>points</span><span class=p>.</span><span class=n>emplace_back</span><span class=p>(</span><span class=n>w</span><span class=p>,</span> <span class=n>h</span><span class=p>,</span> <span class=mf>0.F</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>      <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>points</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}(</span><span class=n>cv</span><span class=o>::</span><span class=n>Size</span><span class=p>(</span><span class=mi>7</span><span class=p>,</span> <span class=mi>6</span><span class=p>));</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=n>std</span><span class=o>::</span><span class=n>vector</span><span class=o>&lt;</span><span class=n>std</span><span class=o>::</span><span class=n>vector</span><span class=o>&lt;</span><span class=n>cv</span><span class=o>::</span><span class=n>Point3f</span><span class=o>&gt;&gt;</span> <span class=n>objectPoints</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=n>objectPoints</span><span class=p>.</span><span class=n>reserve</span><span class=p>(</span><span class=n>inputImages</span><span class=p>.</span><span class=n>size</span><span class=p>());</span>
+</span></span><span class=line><span class=cl>  <span class=n>std</span><span class=o>::</span><span class=n>vector</span><span class=o>&lt;</span><span class=n>std</span><span class=o>::</span><span class=n>vector</span><span class=o>&lt;</span><span class=n>cv</span><span class=o>::</span><span class=n>Point2f</span><span class=o>&gt;&gt;</span> <span class=n>imagePoints</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=n>imagePoints</span><span class=p>.</span><span class=n>reserve</span><span class=p>(</span><span class=n>inputImages</span><span class=p>.</span><span class=n>size</span><span class=p>());</span>
+</span></span><span class=line><span class=cl>  <span class=k>const</span> <span class=n>cv</span><span class=o>::</span><span class=n>Size</span> <span class=n>patternSize</span><span class=p>(</span><span class=mi>7</span><span class=p>,</span> <span class=mi>6</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=k>const</span> <span class=k>auto</span> <span class=n>criteria</span> <span class=o>=</span> <span class=n>cv</span><span class=o>::</span><span class=n>TermCriteria</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>      <span class=n>cv</span><span class=o>::</span><span class=n>TermCriteria</span><span class=o>::</span><span class=n>Type</span><span class=o>::</span><span class=n>EPS</span> <span class=o>+</span> <span class=n>cv</span><span class=o>::</span><span class=n>TermCriteria</span><span class=o>::</span><span class=n>Type</span><span class=o>::</span><span class=n>MAX_ITER</span><span class=p>,</span> <span class=mi>30</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=mf>0.001</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=k>for</span> <span class=p>(</span><span class=n>size_t</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=n>imageCount</span><span class=p>;</span> <span class=n>i</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>std</span><span class=o>::</span><span class=n>cout</span> <span class=o>&lt;&lt;</span> <span class=n>inputPaths</span><span class=p>[</span><span class=n>i</span><span class=p>]</span> <span class=o>&lt;&lt;</span> <span class=n>std</span><span class=o>::</span><span class=n>endl</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=n>std</span><span class=o>::</span><span class=n>vector</span><span class=o>&lt;</span><span class=n>cv</span><span class=o>::</span><span class=n>Point2f</span><span class=o>&gt;</span> <span class=n>corners</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>auto</span> <span class=n>ret</span> <span class=o>=</span>
+</span></span><span class=line><span class=cl>        <span class=n>cv</span><span class=o>::</span><span class=n>findChessboardCorners</span><span class=p>(</span><span class=n>inputGrayImages</span><span class=p>[</span><span class=n>i</span><span class=p>],</span> <span class=n>patternSize</span><span class=p>,</span> <span class=n>corners</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=n>ret</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=n>objectPoints</span><span class=p>.</span><span class=n>push_back</span><span class=p>(</span><span class=n>objectPoint</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>      <span class=n>cv</span><span class=o>::</span><span class=n>cornerSubPix</span><span class=p>(</span><span class=n>inputGrayImages</span><span class=p>[</span><span class=n>i</span><span class=p>],</span> <span class=n>corners</span><span class=p>,</span> <span class=n>cv</span><span class=o>::</span><span class=n>Size</span><span class=p>(</span><span class=mi>11</span><span class=p>,</span> <span class=mi>11</span><span class=p>),</span>
+</span></span><span class=line><span class=cl>                       <span class=n>cv</span><span class=o>::</span><span class=n>Size</span><span class=p>(</span><span class=o>-</span><span class=mi>1</span><span class=p>,</span> <span class=o>-</span><span class=mi>1</span><span class=p>),</span> <span class=n>criteria</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>      <span class=n>imagePoints</span><span class=p>.</span><span class=n>push_back</span><span class=p>(</span><span class=n>corners</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=k>auto</span> <span class=n>imageSize</span> <span class=o>=</span> <span class=n>inputGrayImages</span><span class=p>.</span><span class=n>front</span><span class=p>().</span><span class=n>size</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=n>cv</span><span class=o>::</span><span class=n>Mat</span> <span class=n>cameraMatrix</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=n>cv</span><span class=o>::</span><span class=n>Mat</span> <span class=n>distCoeffs</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=n>std</span><span class=o>::</span><span class=n>vector</span><span class=o>&lt;</span><span class=n>cv</span><span class=o>::</span><span class=n>Mat</span><span class=o>&gt;</span> <span class=n>rvecs</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=n>std</span><span class=o>::</span><span class=n>vector</span><span class=o>&lt;</span><span class=n>cv</span><span class=o>::</span><span class=n>Mat</span><span class=o>&gt;</span> <span class=n>tvecs</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=k>auto</span> <span class=n>ret</span> <span class=o>=</span> <span class=n>cv</span><span class=o>::</span><span class=n>calibrateCamera</span><span class=p>(</span><span class=n>objectPoints</span><span class=p>,</span> <span class=n>imagePoints</span><span class=p>,</span> <span class=n>imageSize</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                                 <span class=n>cameraMatrix</span><span class=p>,</span> <span class=n>distCoeffs</span><span class=p>,</span> <span class=n>rvecs</span><span class=p>,</span> <span class=n>tvecs</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=n>std</span><span class=o>::</span><span class=n>cout</span> <span class=o>&lt;&lt;</span> <span class=s>&#34;Total error: &#34;</span> <span class=o>&lt;&lt;</span> <span class=n>ret</span> <span class=o>&lt;&lt;</span> <span class=s>&#34;</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=n>cv</span><span class=o>::</span><span class=n>Rect</span> <span class=n>validPixROI</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=k>auto</span> <span class=n>newCameraMatrix</span> <span class=o>=</span> <span class=n>cv</span><span class=o>::</span><span class=n>getOptimalNewCameraMatrix</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>      <span class=n>cameraMatrix</span><span class=p>,</span> <span class=n>distCoeffs</span><span class=p>,</span> <span class=n>imageSize</span><span class=p>,</span> <span class=mf>1.F</span><span class=p>,</span> <span class=n>imageSize</span><span class=p>,</span> <span class=o>&amp;</span><span class=n>validPixROI</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=k>for</span> <span class=p>(</span><span class=n>size_t</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=n>imageCount</span><span class=p>;</span> <span class=n>i</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>cv</span><span class=o>::</span><span class=n>Mat</span> <span class=n>undistortImage</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=n>cv</span><span class=o>::</span><span class=n>undistort</span><span class=p>(</span><span class=n>inputImages</span><span class=p>[</span><span class=n>i</span><span class=p>],</span> <span class=n>undistortImage</span><span class=p>,</span> <span class=n>cameraMatrix</span><span class=p>,</span> <span class=n>distCoeffs</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                  <span class=n>newCameraMatrix</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=n>std</span><span class=o>::</span><span class=n>string</span> <span class=n>outputImageName</span> <span class=o>=</span>
+</span></span><span class=line><span class=cl>        <span class=s>&#34;undistortImage_&#34;</span> <span class=o>+</span> <span class=n>std</span><span class=o>::</span><span class=n>to_string</span><span class=p>(</span><span class=n>i</span><span class=p>)</span> <span class=o>+</span> <span class=s>&#34;.png&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=n>cv</span><span class=o>::</span><span class=n>imwrite</span><span class=p>(</span><span class=n>outputImageName</span><span class=p>,</span> <span class=n>undistortImage</span><span class=p>(</span><span class=n>validPixROI</span><span class=p>));</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=kt>float</span> <span class=n>meanError</span> <span class=o>=</span> <span class=mf>0.F</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=k>for</span> <span class=p>(</span><span class=n>size_t</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=n>objectPoints</span><span class=p>.</span><span class=n>size</span><span class=p>();</span> <span class=n>i</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>std</span><span class=o>::</span><span class=n>vector</span><span class=o>&lt;</span><span class=n>cv</span><span class=o>::</span><span class=n>Point2f</span><span class=o>&gt;</span> <span class=n>objectProjectToImagePoints</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=n>cv</span><span class=o>::</span><span class=n>projectPoints</span><span class=p>(</span><span class=n>objectPoints</span><span class=p>[</span><span class=n>i</span><span class=p>],</span> <span class=n>rvecs</span><span class=p>[</span><span class=n>i</span><span class=p>],</span> <span class=n>tvecs</span><span class=p>[</span><span class=n>i</span><span class=p>],</span> <span class=n>cameraMatrix</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                      <span class=n>distCoeffs</span><span class=p>,</span> <span class=n>objectProjectToImagePoints</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=k>auto</span> <span class=n>error</span> <span class=o>=</span>
+</span></span><span class=line><span class=cl>        <span class=n>cv</span><span class=o>::</span><span class=n>norm</span><span class=p>(</span><span class=n>imagePoints</span><span class=p>[</span><span class=n>i</span><span class=p>],</span> <span class=n>objectProjectToImagePoints</span><span class=p>,</span> <span class=n>cv</span><span class=o>::</span><span class=n>NORM_L2</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=n>error</span> <span class=o>/=</span> <span class=n>objectProjectToImagePoints</span><span class=p>.</span><span class=n>size</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>    <span class=n>meanError</span> <span class=o>+=</span> <span class=n>error</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=n>meanError</span> <span class=o>/=</span> <span class=n>objectPoints</span><span class=p>.</span><span class=n>size</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>  <span class=n>std</span><span class=o>::</span><span class=n>cout</span> <span class=o>&lt;&lt;</span> <span class=s>&#34;Total error: &#34;</span> <span class=o>&lt;&lt;</span> <span class=n>ret</span> <span class=o>&lt;&lt;</span> <span class=s>&#34;</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=kn>import</span> <span class=nn>cv2</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>glob</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>numpy</span> <span class=k>as</span> <span class=nn>np</span>
+</span></span><span class=line><span class=cl><span class=kn>from</span> <span class=nn>pprint</span> <span class=kn>import</span> <span class=n>pprint</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>criteria</span> <span class=o>=</span> <span class=p>(</span><span class=n>cv2</span><span class=o>.</span><span class=n>TERM_CRITERIA_EPS</span> <span class=o>+</span> <span class=n>cv2</span><span class=o>.</span><span class=n>TERM_CRITERIA_MAX_ITER</span><span class=p>,</span> <span class=mi>30</span><span class=p>,</span> <span class=mf>0.001</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>obj_point</span> <span class=o>=</span> <span class=n>np</span><span class=o>.</span><span class=n>zeros</span><span class=p>((</span><span class=mi>6</span> <span class=o>*</span> <span class=mi>7</span><span class=p>,</span> <span class=mi>3</span><span class=p>),</span> <span class=n>np</span><span class=o>.</span><span class=n>float32</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>obj_point</span><span class=p>[:,</span> <span class=p>:</span><span class=mi>2</span><span class=p>]</span> <span class=o>=</span> <span class=n>np</span><span class=o>.</span><span class=n>mgrid</span><span class=p>[</span><span class=mi>0</span><span class=p>:</span><span class=mi>7</span><span class=p>,</span> <span class=mi>0</span><span class=p>:</span><span class=mi>6</span><span class=p>]</span><span class=o>.</span><span class=n>T</span><span class=o>.</span><span class=n>reshape</span><span class=p>(</span><span class=o>-</span><span class=mi>1</span><span class=p>,</span> <span class=mi>2</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>obj_points</span> <span class=o>=</span> <span class=p>[]</span>
+</span></span><span class=line><span class=cl><span class=n>img_points</span> <span class=o>=</span> <span class=p>[]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>image_names</span> <span class=o>=</span> <span class=p>[]</span> <span class=c1># 需要给定输入图像组</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>(</span><span class=n>w</span><span class=p>,</span> <span class=n>h</span><span class=p>)</span> <span class=o>=</span> <span class=p>(</span><span class=mi>0</span><span class=p>,</span> <span class=mi>0</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>for</span> <span class=n>image_name</span> <span class=ow>in</span> <span class=n>image_names</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=n>pprint</span><span class=p>(</span><span class=s2>&#34;Current image: [</span><span class=si>{}</span><span class=s2>]&#34;</span><span class=o>.</span><span class=n>format</span><span class=p>(</span><span class=n>image_name</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>    <span class=n>image</span> <span class=o>=</span> <span class=n>cv2</span><span class=o>.</span><span class=n>imread</span><span class=p>(</span><span class=n>image_name</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>image_gray</span> <span class=o>=</span> <span class=n>cv2</span><span class=o>.</span><span class=n>cvtColor</span><span class=p>(</span><span class=n>image</span><span class=p>,</span> <span class=n>cv2</span><span class=o>.</span><span class=n>COLOR_BGR2GRAY</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=p>(</span><span class=n>w</span><span class=p>,</span> <span class=n>h</span><span class=p>)</span> <span class=o>=</span> <span class=n>image_gray</span><span class=o>.</span><span class=n>shape</span><span class=p>[::</span><span class=o>-</span><span class=mi>1</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>ret</span><span class=p>,</span> <span class=n>corners</span> <span class=o>=</span> <span class=n>cv2</span><span class=o>.</span><span class=n>findChessboardCorners</span><span class=p>(</span><span class=n>image_gray</span><span class=p>,</span> <span class=p>(</span><span class=mi>7</span><span class=p>,</span> <span class=mi>6</span><span class=p>),</span> <span class=kc>None</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=c1># ret, corners = cv2.findCirclesGrid(image_gray, (7, 6), None)</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=n>ret</span> <span class=ow>is</span> <span class=kc>True</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=n>obj_points</span><span class=o>.</span><span class=n>append</span><span class=p>(</span><span class=n>obj_point</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>corners_refined</span> <span class=o>=</span> <span class=n>cv2</span><span class=o>.</span><span class=n>cornerSubPix</span><span class=p>(</span><span class=n>image_gray</span><span class=p>,</span> <span class=n>corners</span><span class=p>,</span> <span class=p>(</span><span class=mi>11</span><span class=p>,</span> <span class=mi>11</span><span class=p>),</span> <span class=p>(</span><span class=o>-</span><span class=mi>1</span><span class=p>,</span> <span class=o>-</span><span class=mi>1</span><span class=p>),</span> <span class=n>criteria</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>img_points</span><span class=o>.</span><span class=n>append</span><span class=p>(</span><span class=n>corners_refined</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>pprint</span><span class=p>(</span><span class=s2>&#34;Image w = </span><span class=si>{}</span><span class=s2>, h = </span><span class=si>{}</span><span class=s2>&#34;</span><span class=o>.</span><span class=n>format</span><span class=p>(</span><span class=n>w</span><span class=p>,</span> <span class=n>h</span><span class=p>))</span>
+</span></span><span class=line><span class=cl><span class=n>ret</span><span class=p>,</span> <span class=n>mtx</span><span class=p>,</span> <span class=n>dist</span><span class=p>,</span> <span class=n>rvecs</span><span class=p>,</span> <span class=n>tvecs</span> <span class=o>=</span> <span class=n>cv2</span><span class=o>.</span><span class=n>calibrateCamera</span><span class=p>(</span><span class=n>obj_points</span><span class=p>,</span> <span class=n>img_points</span><span class=p>,</span> <span class=p>(</span><span class=n>w</span><span class=p>,</span> <span class=n>h</span><span class=p>),</span> <span class=kc>None</span><span class=p>,</span> <span class=kc>None</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># undistortion</span>
+</span></span><span class=line><span class=cl><span class=n>image</span> <span class=o>=</span> <span class=n>cv2</span><span class=o>.</span><span class=n>imread</span><span class=p>(</span><span class=n>image_names</span><span class=p>[</span><span class=mi>0</span><span class=p>])</span>
+</span></span><span class=line><span class=cl><span class=n>new_camera_mtx</span><span class=p>,</span> <span class=n>roi</span> <span class=o>=</span> <span class=n>cv2</span><span class=o>.</span><span class=n>getOptimalNewCameraMatrix</span><span class=p>(</span><span class=n>mtx</span><span class=p>,</span> <span class=n>dist</span><span class=p>,</span> <span class=p>(</span><span class=n>w</span><span class=p>,</span> <span class=n>h</span><span class=p>),</span> <span class=mi>1</span><span class=p>,</span> <span class=p>(</span><span class=n>w</span><span class=p>,</span> <span class=n>h</span><span class=p>))</span>
+</span></span><span class=line><span class=cl><span class=n>dst</span> <span class=o>=</span> <span class=n>cv2</span><span class=o>.</span><span class=n>undistort</span><span class=p>(</span><span class=n>image</span><span class=p>,</span> <span class=n>mtx</span><span class=p>,</span> <span class=n>dist</span><span class=p>,</span> <span class=kc>None</span><span class=p>,</span> <span class=n>new_camera_mtx</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># x, y, w, h = roi</span>
+</span></span><span class=line><span class=cl><span class=c1># dst = dst[y: y+h, x: x+w]</span>
+</span></span><span class=line><span class=cl><span class=n>cv2</span><span class=o>.</span><span class=n>imwrite</span><span class=p>(</span><span class=s2>&#34;calibresult.png&#34;</span><span class=p>,</span> <span class=n>dst</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># reprojection error</span>
+</span></span><span class=line><span class=cl><span class=n>mean_error</span> <span class=o>=</span> <span class=mi>0</span>
+</span></span><span class=line><span class=cl><span class=k>for</span> <span class=n>i</span> <span class=ow>in</span> <span class=nb>range</span><span class=p>(</span><span class=nb>len</span><span class=p>(</span><span class=n>obj_points</span><span class=p>)):</span>
+</span></span><span class=line><span class=cl>    <span class=n>img_points2</span><span class=p>,</span> <span class=n>_</span> <span class=o>=</span> <span class=n>cv2</span><span class=o>.</span><span class=n>projectPoints</span><span class=p>(</span><span class=n>obj_points</span><span class=p>[</span><span class=n>i</span><span class=p>],</span> <span class=n>rvecs</span><span class=p>[</span><span class=n>i</span><span class=p>],</span> <span class=n>tvecs</span><span class=p>[</span><span class=n>i</span><span class=p>],</span> <span class=n>mtx</span><span class=p>,</span> <span class=n>dist</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>error</span> <span class=o>=</span> <span class=n>cv2</span><span class=o>.</span><span class=n>norm</span><span class=p>(</span><span class=n>img_points</span><span class=p>[</span><span class=n>i</span><span class=p>],</span> <span class=n>img_points2</span><span class=p>,</span> <span class=n>cv2</span><span class=o>.</span><span class=n>NORM_L2</span><span class=p>)</span> <span class=o>/</span> <span class=nb>len</span><span class=p>(</span><span class=n>img_points2</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=n>error</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>mean_error</span> <span class=o>+=</span> <span class=n>error</span>
+</span></span><span class=line><span class=cl><span class=n>pprint</span><span class=p>(</span><span class=s2>&#34;Total error: </span><span class=si>{}</span><span class=s2>&#34;</span><span class=o>.</span><span class=n>format</span><span class=p>(</span><span class=n>mean_error</span> <span class=o>/</span> <span class=nb>len</span><span class=p>(</span><span class=n>obj_points</span><span class=p>)))</span>
+</span></span></code></pre></td></tr></table></div></div></div><div id=comments><div id=giscus class=comment></div><noscript>Please enable JavaScript to view the comments powered by <a href=https://giscus.app>Giscus</a>.</noscript></div></div></div></main><footer class=footer><div class=footer-container><div class=footer-line itemscope itemtype=http://schema.org/CreativeWork><i class="far fa-copyright fa-fw" aria-hidden=true></i><span itemprop=copyrightYear>2020 - 2024</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=https://github.com/zixianweei target=_blank>zixianweei</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div></div></footer></div><div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title=回到顶部><i class="fas fa-arrow-up fa-fw" aria-hidden=true></i>
+</a><a href=# id=view-comments class=fixed-button title=查看评论><i class="fas fa-comment fa-fw" aria-hidden=true></i></a></div><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/lightgallery@2.5.0/css/lightgallery-bundle.min.css><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/twemoji@14.0.2/dist/twemoji.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lightgallery@2.5.0/lightgallery.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lightgallery@2.5.0/plugins/thumbnail/lg-thumbnail.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lightgallery@2.5.0/plugins/zoom/lg-zoom.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/copy-tex.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/mhchem.min.js></script><script type=text/javascript>window.config={code:{copyTitle:"复制到剪贴板",maxShownLines:50},comment:{giscus:{category:"General",categoryId:"DIC_kwDOLsbaB84CemWN",darkTheme:"dark",emitMetadata:"0",inputPosition:"bottom",lang:"zh-CN",lazyLoading:!1,lightTheme:"light",mapping:"pathname",reactionsEnabled:"1",repo:"zixianweei/zixianweei.github.io",repoId:"R_kgDOLsbaBw"}},lightgallery:!0,math:{delimiters:[{display:!0,left:"$$",right:"$$"},{display:!0,left:"\\[",right:"\\]"},{display:!0,left:"\\begin{equation}",right:"\\end{equation}"},{display:!0,left:"\\begin{equation*}",right:"\\end{equation*}"},{display:!0,left:"\\begin{align}",right:"\\end{align}"},{display:!0,left:"\\begin{align*}",right:"\\end{align*}"},{display:!0,left:"\\begin{alignat}",right:"\\end{alignat}"},{display:!0,left:"\\begin{alignat*}",right:"\\end{alignat*}"},{display:!0,left:"\\begin{gather}",right:"\\end{gather}"},{display:!0,left:"\\begin{CD}",right:"\\end{CD}"},{display:!1,left:"$",right:"$"},{display:!1,left:"\\(",right:"\\)"}],strict:!1},twemoji:!0}</script><script type=text/javascript src=/js/theme.min.js></script></body></html>

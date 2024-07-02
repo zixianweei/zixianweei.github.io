@@ -2,7 +2,7 @@
 
 
 {{< admonition type=info title="FYI" open=false >}}
-原文来自OpenCV官方文档[^1]，本人在翻译过程中进行了简单加工和信息补充。如果您认为侵犯了您的合法权益，请与我联系，我将删除本文。
+原文来自[OpenCV官方文档](https://docs.opencv.org/4.8.0/dc/dbb/tutorial_py_calibration.html)，本人在翻译过程中进行了简单加工和信息补充。如果您认为侵犯了您的合法权益，请与我联系，我将删除本文。
 {{< /admonition >}}
 
 ## 本文目标
@@ -17,15 +17,20 @@
 
 基于小孔成像模型的相机会为所拍摄的图像引入图像畸变问题。其中，最主要的畸变类型是：**径向畸变**（radial distortion）和**切向畸变**（tangential distortion）。
 
-径向畸变会导致真实场景中的直线变为图像中的曲线。该现象具有越远离图像中心越明显的特点。在图1中，棋盘格两侧使用了两条红色参考线作为对比，可以发现：棋盘格的边缘不再是一条直线；与红色参考线相比，弯曲的线条向图像边缘膨胀；且越靠近图像边缘，线条向外膨胀的现象越明显。如果想要了解更多有关图像畸变的知识，可以参考维基百科中的[**光学畸变**](https://en.wikipedia.org/wiki/Distortion_%28optics%29)[^2]一节。
+径向畸变会导致真实场景中的直线变为图像中的曲线。该现象具有越远离图像中心越明显的特点。在图1中，棋盘格两侧使用了两条红色参考线作为对比，可以发现：棋盘格的边缘不再是一条直线；与红色参考线相比，弯曲的线条向图像边缘膨胀；且越靠近图像边缘，线条向外膨胀的现象越明显。如果想要了解更多有关图像畸变的知识，可以参考维基百科中的[**光学畸变**](https://en.wikipedia.org/wiki/Distortion_%28optics%29)一节。
 
-{{< figure src="/img/calib_radial.jpg" title="图1 径向畸变现象展示" >}}
+<figure>
+  <img src="/img/calib_radial.jpg" style="width:50%;">
+  <figcaption>
+    <h4>图1 径向畸变现象展示</h4>
+  </figcaption>
+</figure>
 
 具体的，径向畸变可以使用下面的公式表示：
 
 $$
 \begin{align*}
-x_{distorted} &= x(1 + k_{1} r^2 + k_{2} r^4 + k_{3} r^6) \\
+x_{distorted} &= x(1 + k_{1} r^2 + k_{2} r^4 + k_{3} r^6), \\\\
 y_{distorted} &= y(1 + k_{1} r^2 + k_{2} r^4 + k_{3} r^6).
 \end{align*}
 $$
@@ -34,7 +39,7 @@ $$
 
 $$
 \begin{align*}
-x_{distorted} &= x + [2p_{1}xy + p_{2}(r^2+2x^2)] \\
+x_{distorted} &= x + [2p_{1}xy + p_{2}(r^2+2x^2)], \\\\
 y_{distorted} &= y + [p_{1}(r^2+2y^2) + 2p_{2}xy].
 \end{align*}
 $$
@@ -55,17 +60,15 @@ $$
 \begin{align*}
 M_{camera} =
 \begin{bmatrix}
-f_x & 0 & c_x \\ 0 & f_y & c_y \\ 0 & 0 & 1
+f_x & 0 & c_x \\\\ 0 & f_y & c_y \\\\ 0 & 0 & 1
 \end{bmatrix}.
 \end{align*}
 $$
 
 对于外部参数，他通常是由一些旋转和平移的向量组成，用于表示三维空间中物体位置到相机坐标位置的转换。由于每张图像中拍摄的场景都可能存在不同，外部参数往往因拍摄的图像而异。
 
-{{< admonition >}}
-**译者注：坐标转换和坐标空间**
-
-这里可以参考图形学渲染管线中的顶点处理阶段进行理解。在变换过程中主要涉及五种坐标空间，目的是为了将三维空间中的物体投影到相机平面中。相关信息可以查阅LearnOpenGL[^3]。
+{{< admonition type=note title="译者注：坐标转换和坐标空间" open=false >}}
+这里可以参考图形学渲染管线中的顶点处理阶段进行理解。在变换过程中主要涉及五种坐标空间，目的是为了将三维空间中的物体投影到相机平面中。相关信息可以查阅[LearnOpenGL](https://learnopengl-cn.github.io/01%20Getting%20started/08%20Coordinate%20Systems/)。
 {{< /admonition >}}
 
 对于立体视觉应用，图像畸变是首先需要被消除和矫正的，否则会引起后续处理流程的误差累计或产生错误结果。为了得到用于消除图像畸变的参数，我们需要使用相机拍摄一些精心设计场景。其中，最为常见的场景是棋盘格图像。在精心设计的场景中，我们能够预先知道真实世界中的关键点坐标信息，也可以通过图像处理的方式得到关键点在图像中的相应坐标信息。通过多个这样的信息对，就可以计算得到用于消畸变的畸变参数、相机内外参数等。一般来说，为了得到更好的结果，往往需要对相同的场景拍摄至少10张不同角度的测试图像。
@@ -82,17 +85,17 @@ $$
 
 为了能够搜索到棋盘格图像中的像点，我们使用`cv2.findChessboardCorners()`函数进行处理。该函数需要我们指定棋盘格图像的像点排列情况，如$8\times 8$或$5 \times 5$大小的棋盘格。在本文的示例中，我们使用的是$7\times 6$排列情况的棋盘格。通常情况下，一个$8\times 8$排列情况的棋盘格能够找到$7 \times 7$个像点。函数运行后会返回一个表示是否找到指定排列模式的标志位`retval`。如果`retval`为`True`，表示函数找了指定的像点集合。并且该函数返回的像点集合会按顺序排列，例如从左到右从上到下的顺序。
 
-!!! info "小提示"
+{{< admonition type=note title="小提示" open=false >}}
+在给定一组棋盘格图像后，该函数可能无法在任何一张图像中找到符合要求的像点。因此，较好的做法是：启动相机并拍摄图像后，就使用该函数进行像点的检测；一旦能够在拍摄的图像中找到符合要求的像点，就将结果保存到数组中。此外，在两次拍摄之间，可以预留一些时间，用于调整棋盘格的位置和方向。通过重复上述过程，直到所需的物像点对数满足要求。即使是本文使用的13张图像，我们也无法保证每张图像都能够找到物像点对。因此，我们的做法是：读取所有的图像并逐个检测，然后只选取其中能够检测出符合要求像点的图像进行后续处理。除了棋盘格标定板外，我们还可以使用圆形阵列标定板。此时，可以使用`cv2.findCirclesGrid()`函数搜索符合要求的像点，并且圆形阵列标定板可以使用更少的图像数量完成相机标定。
+{{< /admonition >}}
 
-    在给定一组棋盘格图像后，该函数可能无法在任何一张图像中找到符合要求的像点。因此，较好的做法是：启动相机并拍摄图像后，就使用该函数进行像点的检测；一旦能够在拍摄的图像中找到符合要求的像点，就将结果保存到数组中。此外，在两次拍摄之间，可以预留一些时间，用于调整棋盘格的位置和方向。通过重复上述过程，直到所需的物像点对数满足要求。即使是本文使用的13张图像，我们也无法保证每张图像都能够找到物像点对。因此，我们的做法是：读取所有的图像并逐个检测，然后只选取其中能够检测出符合要求像点的图像进行后续处理。除了棋盘格标定板外，我们还可以使用圆形阵列标定板。此时，可以使用`cv2.findCirclesGrid()`函数搜索符合要求的像点，并且圆形阵列标定板可以使用更少的图像数量完成相机标定。
+{{< admonition type=note title="译者注：OpenCV中支持的标定板类型" open=false >}}
+截止4.8.0版本，OpenCV的API中支持了棋盘格、圆形网格和CharuCo三种标定板。来源：[知乎](https://zhuanlan.zhihu.com/p/353316030)
+{{< /admonition >}}
 
-??? note "译者注：OpenCV中支持的标定板类型"
-
-    截止4.8.0版本，OpenCV的API中支持了棋盘格、圆形网格和CharuCo三种标定板[^4]。
-
-??? note "译者注：棋盘格的角点排列"
-
-    一般来说，拍摄长宽两个方向上具有不同方块数的棋盘格。若长宽方块数量相同，得到的结果存在二义性，无法分辨是没有旋转的结果，还是旋转了$180^{\circ}$的结果。
+{{< admonition type=note title="译者注：棋盘格的角点排列" open=false >}}
+一般来说，拍摄长宽两个方向上具有不同方块数的棋盘格。若长宽方块数量相同，得到的结果存在二义性，无法分辨是没有旋转的结果，还是旋转了$180^{\circ}$的结果。
+{{< /admonition >}}
 
 对于搜索到像点，我们可以使用`cv2.cornerSubPix()`来进一步提高他们的坐标精度。此外，还可以使用`cv2.drawChessboardCorners`在图像中绘制精细化后的有序像点集合。上述的所有流程都可以使用下面的代码完成功能实现。
 
@@ -129,7 +132,12 @@ cv2.destroyAllWindows()
 
 对于任意一张棋盘格图像，搜索像点并将像点绘制在棋盘格图像中的结果如图2所示。
 
-{{< figure src="/img/calib_pattern.jpg" title="图2 有序像点的可视化" >}}
+<figure>
+  <img src="/img/calib_pattern.jpg" style="width:50%;">
+  <figcaption>
+    <h4>图2 有序像点的可视化</h4>
+  </figcaption>
+</figure>
 
 ### 标定参数
 
@@ -144,9 +152,9 @@ cv2.destroyAllWindows()
 ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, gray.shape[::-1], None, None)
 ```
 
-??? note "译者注：张氏标定法"
-
-    感兴趣的同学可以查看张正友老师于1998年发表的论文，其中详细解释了相机标定的过程和数学推导[^5]。
+{{< admonition type=note title="译者注：张氏标定法" open=false >}}
+感兴趣的同学可以查看张正友老师于1998年发表的论文[A Flexible New Technique for Camera Calibration](https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/tr98-71.pdf)，其中详细解释了相机标定的过程和数学推导。
+{{< /admonition >}}
 
 ### 图像消畸变
 
@@ -189,7 +197,12 @@ cv2.imwrite('calibresult.png', dst)
 
 但无论使用哪种方式，都能够得到相同的消畸变结果。本文图1的消畸变结果如图3所示。可以发现：图像中原本向边缘膨胀的线条变直了。在完成相机标定和优化后，可以使用numpy中的`numpy.savez()`或`numpy.savetxt()`方法保存相机内外参数和畸变参数，以便后续读取使用。
 
-{{< figure src="/img/calib_result.jpg" title="图3 图像消畸变结果示例" >}}
+<figure>
+  <img src="/img/calib_result.jpg" style="width:50%;">
+  <figcaption>
+    <h4>图3 图像消畸变结果示例</h4>
+  </figcaption>
+</figure>
 
 ### 重投影误差
 
@@ -206,171 +219,161 @@ print( "total error: {}".format(mean_error/len(objpoints)) )
 
 ## 完整的代码
 
-??? "使用C++和Python实现的完整测试代码"
+```cpp
+#include <iostream>
+#include <memory>
+#include <vector>
 
-    === "C++"
+#include <opencv2/opencv.hpp>
 
-        ```cpp linenums="1"
-        #include <iostream>
-        #include <memory>
-        #include <vector>
-        
-        #include <opencv2/opencv.hpp>
-        
-        int main() {
-          std::vector<std::string> inputPaths;  // 需要给定输入图像组
-        
-          std::vector<cv::Mat> inputImages;
-          inputImages.reserve(inputPaths.size());
-          for (const auto& inputPath : inputPaths) {
-            cv::Mat inputImage = cv::imread(inputPath);
-            if (inputImage.empty()) {
-              std::cout << "Input image is empty. [" << inputPath << "]\n";
-              return EXIT_FAILURE;
-            }
-            inputImages.push_back(inputImage);
-          }
-        
-          size_t imageCount = inputImages.size();
-        
-          std::vector<cv::Mat> inputGrayImages;
-          inputGrayImages.reserve(inputImages.size());
-          for (const auto& inputImage : inputImages) {
-            cv::Mat inputGrayImage;
-            cv::cvtColor(inputImage, inputGrayImage, cv::COLOR_BGR2GRAY);
-            inputGrayImages.push_back(inputGrayImage);
-          }
-        
-          static std::vector<cv::Point3f> objectPoint = [](const cv::Size& size) {
-            std::vector<cv::Point3f> points;
-            for (auto h = 0; h < size.height; h++) {
-              for (auto w = 0; w < size.width; w++) {
-                points.emplace_back(w, h, 0.F);
-              }
-            }
-            return points;
-          }(cv::Size(7, 6));
-        
-          std::vector<std::vector<cv::Point3f>> objectPoints;
-          objectPoints.reserve(inputImages.size());
-          std::vector<std::vector<cv::Point2f>> imagePoints;
-          imagePoints.reserve(inputImages.size());
-          const cv::Size patternSize(7, 6);
-          const auto criteria = cv::TermCriteria(
-              cv::TermCriteria::Type::EPS + cv::TermCriteria::Type::MAX_ITER, 30,
-              0.001);
-          for (size_t i = 0; i < imageCount; i++) {
-            std::cout << inputPaths[i] << std::endl;
-            std::vector<cv::Point2f> corners;
-            auto ret =
-                cv::findChessboardCorners(inputGrayImages[i], patternSize, corners);
-            if (ret) {
-              objectPoints.push_back(objectPoint);
-              cv::cornerSubPix(inputGrayImages[i], corners, cv::Size(11, 11),
-                               cv::Size(-1, -1), criteria);
-              imagePoints.push_back(corners);
-            }
-          }
-        
-          auto imageSize = inputGrayImages.front().size();
-        
-          cv::Mat cameraMatrix;
-          cv::Mat distCoeffs;
-          std::vector<cv::Mat> rvecs;
-          std::vector<cv::Mat> tvecs;
-          auto ret = cv::calibrateCamera(objectPoints, imagePoints, imageSize,
-                                         cameraMatrix, distCoeffs, rvecs, tvecs);
-          std::cout << "Total error: " << ret << "\n";
-        
-          cv::Rect validPixROI;
-          auto newCameraMatrix = cv::getOptimalNewCameraMatrix(
-              cameraMatrix, distCoeffs, imageSize, 1.F, imageSize, &validPixROI);
-        
-          for (size_t i = 0; i < imageCount; i++) {
-            cv::Mat undistortImage;
-            cv::undistort(inputImages[i], undistortImage, cameraMatrix, distCoeffs,
-                          newCameraMatrix);
-            std::string outputImageName =
-                "undistortImage_" + std::to_string(i) + ".png";
-            cv::imwrite(outputImageName, undistortImage(validPixROI));
-          }
-        
-          float meanError = 0.F;
-          for (size_t i = 0; i < objectPoints.size(); i++) {
-            std::vector<cv::Point2f> objectProjectToImagePoints;
-            cv::projectPoints(objectPoints[i], rvecs[i], tvecs[i], cameraMatrix,
-                              distCoeffs, objectProjectToImagePoints);
-            auto error =
-                cv::norm(imagePoints[i], objectProjectToImagePoints, cv::NORM_L2);
-            error /= objectProjectToImagePoints.size();
-            meanError += error;
-          }
-        
-          meanError /= objectPoints.size();
-          std::cout << "Total error: " << ret << "\n";
-        
-          return 0;
-        }
-        ```
-    
-    === "Python"
-        
-        ```python linenums="1"
-        import cv2
-        import glob
-        import numpy as np
-        from pprint import pprint
-        
-        criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
-        
-        obj_point = np.zeros((6 * 7, 3), np.float32)
-        obj_point[:, :2] = np.mgrid[0:7, 0:6].T.reshape(-1, 2)
-        
-        obj_points = []
-        img_points = []
-        
-        image_names = [] # 需要给定输入图像组
-        
-        (w, h) = (0, 0)
-        
-        for image_name in image_names:
-            pprint("Current image: [{}]".format(image_name))
-            image = cv2.imread(image_name)
-            image_gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-            (w, h) = image_gray.shape[::-1]
-        
-            ret, corners = cv2.findChessboardCorners(image_gray, (7, 6), None)
-            # ret, corners = cv2.findCirclesGrid(image_gray, (7, 6), None)
-            if ret is True:
-                obj_points.append(obj_point)
-                corners_refined = cv2.cornerSubPix(image_gray, corners, (11, 11), (-1, -1), criteria)
-                img_points.append(corners_refined)
-        
-        pprint("Image w = {}, h = {}".format(w, h))
-        ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(obj_points, img_points, (w, h), None, None)
-        
-        # undistortion
-        image = cv2.imread(image_names[0])
-        new_camera_mtx, roi = cv2.getOptimalNewCameraMatrix(mtx, dist, (w, h), 1, (w, h))
-        dst = cv2.undistort(image, mtx, dist, None, new_camera_mtx)
-        
-        # x, y, w, h = roi
-        # dst = dst[y: y+h, x: x+w]
-        cv2.imwrite("calibresult.png", dst)
-        
-        # reprojection error
-        mean_error = 0
-        for i in range(len(obj_points)):
-            img_points2, _ = cv2.projectPoints(obj_points[i], rvecs[i], tvecs[i], mtx, dist)
-            error = cv2.norm(img_points[i], img_points2, cv2.NORM_L2) / len(img_points2)
-            print(error)
-            mean_error += error
-        pprint("Total error: {}".format(mean_error / len(obj_points)))
-        ```
+int main() {
+  std::vector<std::string> inputPaths;  // 需要给定输入图像组
 
-[^1]: [OpenCV: Camera Calibration](https://docs.opencv.org/4.8.0/dc/dbb/tutorial_py_calibration.html)
-[^2]: [Distortion (optics)](https://en.wikipedia.org/wiki/Distortion_(optics))
-[^3]: [LearnOpenGL-CN 坐标系统](https://learnopengl-cn.github.io/01%20Getting%20started/08%20Coordinate%20Systems/)
-[^4]: [相机标定中各种标定板介绍以及优缺点分析](https://zhuanlan.zhihu.com/p/353316030)
-[^5]: [A Flexible New Technique for Camera Calibration](https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/tr98-71.pdf)
+  std::vector<cv::Mat> inputImages;
+  inputImages.reserve(inputPaths.size());
+  for (const auto& inputPath : inputPaths) {
+    cv::Mat inputImage = cv::imread(inputPath);
+    if (inputImage.empty()) {
+      std::cout << "Input image is empty. [" << inputPath << "]\n";
+      return EXIT_FAILURE;
+    }
+    inputImages.push_back(inputImage);
+  }
+
+  size_t imageCount = inputImages.size();
+
+  std::vector<cv::Mat> inputGrayImages;
+  inputGrayImages.reserve(inputImages.size());
+  for (const auto& inputImage : inputImages) {
+    cv::Mat inputGrayImage;
+    cv::cvtColor(inputImage, inputGrayImage, cv::COLOR_BGR2GRAY);
+    inputGrayImages.push_back(inputGrayImage);
+  }
+
+  static std::vector<cv::Point3f> objectPoint = [](const cv::Size& size) {
+    std::vector<cv::Point3f> points;
+    for (auto h = 0; h < size.height; h++) {
+      for (auto w = 0; w < size.width; w++) {
+        points.emplace_back(w, h, 0.F);
+      }
+    }
+    return points;
+  }(cv::Size(7, 6));
+
+  std::vector<std::vector<cv::Point3f>> objectPoints;
+  objectPoints.reserve(inputImages.size());
+  std::vector<std::vector<cv::Point2f>> imagePoints;
+  imagePoints.reserve(inputImages.size());
+  const cv::Size patternSize(7, 6);
+  const auto criteria = cv::TermCriteria(
+      cv::TermCriteria::Type::EPS + cv::TermCriteria::Type::MAX_ITER, 30,
+      0.001);
+  for (size_t i = 0; i < imageCount; i++) {
+    std::cout << inputPaths[i] << std::endl;
+    std::vector<cv::Point2f> corners;
+    auto ret =
+        cv::findChessboardCorners(inputGrayImages[i], patternSize, corners);
+    if (ret) {
+      objectPoints.push_back(objectPoint);
+      cv::cornerSubPix(inputGrayImages[i], corners, cv::Size(11, 11),
+                       cv::Size(-1, -1), criteria);
+      imagePoints.push_back(corners);
+    }
+  }
+
+  auto imageSize = inputGrayImages.front().size();
+
+  cv::Mat cameraMatrix;
+  cv::Mat distCoeffs;
+  std::vector<cv::Mat> rvecs;
+  std::vector<cv::Mat> tvecs;
+  auto ret = cv::calibrateCamera(objectPoints, imagePoints, imageSize,
+                                 cameraMatrix, distCoeffs, rvecs, tvecs);
+  std::cout << "Total error: " << ret << "\n";
+
+  cv::Rect validPixROI;
+  auto newCameraMatrix = cv::getOptimalNewCameraMatrix(
+      cameraMatrix, distCoeffs, imageSize, 1.F, imageSize, &validPixROI);
+
+  for (size_t i = 0; i < imageCount; i++) {
+    cv::Mat undistortImage;
+    cv::undistort(inputImages[i], undistortImage, cameraMatrix, distCoeffs,
+                  newCameraMatrix);
+    std::string outputImageName =
+        "undistortImage_" + std::to_string(i) + ".png";
+    cv::imwrite(outputImageName, undistortImage(validPixROI));
+  }
+
+  float meanError = 0.F;
+  for (size_t i = 0; i < objectPoints.size(); i++) {
+    std::vector<cv::Point2f> objectProjectToImagePoints;
+    cv::projectPoints(objectPoints[i], rvecs[i], tvecs[i], cameraMatrix,
+                      distCoeffs, objectProjectToImagePoints);
+    auto error =
+        cv::norm(imagePoints[i], objectProjectToImagePoints, cv::NORM_L2);
+    error /= objectProjectToImagePoints.size();
+    meanError += error;
+  }
+
+  meanError /= objectPoints.size();
+  std::cout << "Total error: " << ret << "\n";
+
+  return 0;
+}
+```
+
+```python
+import cv2
+import glob
+import numpy as np
+from pprint import pprint
+
+criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
+
+obj_point = np.zeros((6 * 7, 3), np.float32)
+obj_point[:, :2] = np.mgrid[0:7, 0:6].T.reshape(-1, 2)
+
+obj_points = []
+img_points = []
+
+image_names = [] # 需要给定输入图像组
+
+(w, h) = (0, 0)
+
+for image_name in image_names:
+    pprint("Current image: [{}]".format(image_name))
+    image = cv2.imread(image_name)
+    image_gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    (w, h) = image_gray.shape[::-1]
+
+    ret, corners = cv2.findChessboardCorners(image_gray, (7, 6), None)
+    # ret, corners = cv2.findCirclesGrid(image_gray, (7, 6), None)
+    if ret is True:
+        obj_points.append(obj_point)
+        corners_refined = cv2.cornerSubPix(image_gray, corners, (11, 11), (-1, -1), criteria)
+        img_points.append(corners_refined)
+
+pprint("Image w = {}, h = {}".format(w, h))
+ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(obj_points, img_points, (w, h), None, None)
+
+# undistortion
+image = cv2.imread(image_names[0])
+new_camera_mtx, roi = cv2.getOptimalNewCameraMatrix(mtx, dist, (w, h), 1, (w, h))
+dst = cv2.undistort(image, mtx, dist, None, new_camera_mtx)
+
+
+# x, y, w, h = roi
+# dst = dst[y: y+h, x: x+w]
+cv2.imwrite("calibresult.png", dst)
+
+# reprojection error
+mean_error = 0
+for i in range(len(obj_points)):
+    img_points2, _ = cv2.projectPoints(obj_points[i], rvecs[i], tvecs[i], mtx, dist)
+    error = cv2.norm(img_points[i], img_points2, cv2.NORM_L2) / len(img_points2)
+    print(error)
+    mean_error += error
+pprint("Total error: {}".format(mean_error / len(obj_points)))
+
+```
 
