@@ -20,7 +20,7 @@
 径向畸变会导致真实场景中的直线变为图像中的曲线。该现象具有越远离图像中心越明显的特点。在图1中，棋盘格两侧使用了两条红色参考线作为对比，可以发现：棋盘格的边缘不再是一条直线；与红色参考线相比，弯曲的线条向图像边缘膨胀；且越靠近图像边缘，线条向外膨胀的现象越明显。如果想要了解更多有关图像畸变的知识，可以参考维基百科中的[**光学畸变**](https://en.wikipedia.org/wiki/Distortion_%28optics%29)一节。
 
 <figure>
-  <img src="calib_radial.jpg" style="width:50%;">
+  <img src="calib_radial.jpg" style="width:50%;" alt="calibration radial">
   <figcaption>
     <h4>图1 径向畸变现象展示</h4>
   </figcaption>
@@ -133,7 +133,7 @@ cv2.destroyAllWindows()
 对于任意一张棋盘格图像，搜索像点并将像点绘制在棋盘格图像中的结果如图2所示。
 
 <figure>
-  <img src="calib_pattern.jpg" style="width:50%;">
+  <img src="calib_pattern.jpg" style="width:50%;" alt="calibration pattern">
   <figcaption>
     <h4>图2 有序像点的可视化</h4>
   </figcaption>
@@ -200,7 +200,7 @@ cv2.imwrite('calibresult.png', dst)
 但无论使用哪种方式，都能够得到相同的消畸变结果。本文图1的消畸变结果如图3所示。可以发现：图像中原本向边缘膨胀的线条变直了。在完成相机标定和优化后，可以使用numpy中的`numpy.savez()`或`numpy.savetxt()`方法保存相机内外参数和畸变参数，以便后续读取使用。
 
 <figure>
-  <img src="calib_result.jpg" style="width:50%;">
+  <img src="calib_result.jpg" style="width:50%;" alt="calibration result">
   <figcaption>
     <h4>图3 图像消畸变结果示例</h4>
   </figcaption>
